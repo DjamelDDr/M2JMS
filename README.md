@@ -1,2 +1,2 @@
 # M2JMS
-# En équie avec Ham et Ke
+# En équipe avec Ham et Kevin
