@@ -5,6 +5,8 @@
  */
 package projetjmsmodandr.messages;
 
+import java.util.Date;
+
 /**
  *
  * @author Djamel D
@@ -12,7 +14,8 @@ package projetjmsmodandr.messages;
 public class Message {
     private String contenu;
     private String villeEmission;
-    private boolean msgGeolocalise; 
+    private boolean msgGeolocalise;
+    private Date dateEmission;
 
     /**
      * constructeur du message 
@@ -21,6 +24,7 @@ public class Message {
         this.contenu = contenu;
         this.villeEmission = villeEmission;
         this.msgGeolocalise =msgGeolocalise;
+        this.dateEmission = new Date();
     }
     
     /**
@@ -56,6 +60,20 @@ public class Message {
      */
     public boolean isMsgGeolocalise() {
         return msgGeolocalise;
+    }
+
+    /**
+     * @return the dateEmission
+     */
+    public Date getDateEmission() {
+        return dateEmission;
+    }
+
+    /**
+     * @param dateEmission the dateEmission to set
+     */
+    public void setDateEmission(Date dateEmission) {
+        this.dateEmission = dateEmission;
     }
     
     /**
