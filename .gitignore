@@ -2,3 +2,5 @@
 /nbproject
 /manifest.mf
 /nbproject/
+/dist/
+nbproject/private/private.properties
