@@ -4,3 +4,5 @@
 /nbproject/
 /dist/
 nbproject/private/private.properties
+
+*.db
