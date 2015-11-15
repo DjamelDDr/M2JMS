@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetjmsmodandr.serveur;
+package projetjmsmodandr.client;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,7 +22,7 @@ import javax.jms.TextMessage;
  *
  * @author Djamel D
  */
-public class Sender {
+public class Sender /*extends Thread*/{
     public static void main(String[] args) {
         Context context = null;
         ConnectionFactory factory = null;
