@@ -10,7 +10,7 @@ car une personnes (un user) peut etre à la fois envoyeur et receveur des tweets
 **projetjmsmodandr.serveur **: qui fera office d’orienter les requetes et les reponses au differents users.
 **projetjmsmodandr.data (par Hamza)** contient le serveur de BD H2
 
-
+# attention celui qui envoi ne reçoit pas son propre message
 
 
 

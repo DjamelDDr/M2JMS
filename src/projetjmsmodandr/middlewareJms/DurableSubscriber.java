@@ -21,7 +21,10 @@ import javax.jms.Destination;
  * @author Djamel D
  */
 public class DurableSubscriber {
-
+/**
+ * converse avec les users et le serv 
+ * 
+ */
     public static void main(String[] args) {
         Context context = null;
         ConnectionFactory factory = null;
