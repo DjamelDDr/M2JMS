@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetjmsmodandr.utilisateurs;
+package projetjmsmodandr.client;
 
 import java.util.Date;
 
