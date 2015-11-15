@@ -7,18 +7,6 @@ package projetjmsmodandr.client;
 
 import java.util.Date;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Destination;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Session;
-import javax.jms.MessageConsumer;
-import javax.jms.TextMessage;
 /**
  *
  * @author Djamel D
