@@ -204,7 +204,8 @@ public class DataJDBC {
                 
                 //scanner pour les tests
                 Scanner sTestBDD = new Scanner(System.in);
-                
+             
+            
                 //test getUser()
                 System.out.println("test getUser()");
                 String lo;
@@ -214,8 +215,11 @@ public class DataJDBC {
                 
                 System.out.println(obj.getUser(lo));
                 System.out.println("");
-                
-           /*   //test delUser()
+              
+            
+            
+            /*
+              //test delUser()
                 System.out.println("test delUser()");
                 String lo1, md;
                 System.out.println("login :");
@@ -226,10 +230,9 @@ public class DataJDBC {
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 
                 obj.delUser(lo1,md);
-                
-            */ 
-              
-            /*    //test editUser()
+            */
+             
+                //test editUser()
                 System.out.println("test editUser()");
                 String lo1, mdpO, mdpN;
                 System.out.println("login :");
@@ -242,10 +245,10 @@ public class DataJDBC {
                 mdpN = sTestBDD.next(); //entree de l'ancien mdp
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 System.out.println("");
-                obj.editUser(lo1,mdpO,mdpN);
+                System.out.println(obj.editUser(lo1,mdpO,mdpN));
                 System.out.println("");
-                //obj.getUser(lo1);
-            */    
+                System.out.println(obj.getUser(lo1));
+                
                 obj.close();
                 
                 
@@ -335,9 +338,9 @@ public class DataJDBC {
 	        	retour = "login ou/et mdp n'existe pas : " +login+ " Mdp :"+mdpOld;
 	        	return retour;
 	        } else {
-                        requeteUpdateUserSt.setString(1, login);
-	        	requeteUpdateUserSt.setString(2, mdpNew);
-                int r =	requeteUpdateUserSt.executeUpdate();
+                        requeteUpdateUserSt.setString(1, mdpNew);
+                        requeteUpdateUserSt.setString(2, login);
+                        requeteUpdateUserSt.executeUpdate();
                 
                        System.out.println(1); 
                         retour = "Modification du mot de passe de l'user  : "+login+ " effectuée";
