@@ -6,3 +6,5 @@
 nbproject/private/private.properties
 
 *.db
+
+*.properties

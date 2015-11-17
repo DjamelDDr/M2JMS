@@ -60,7 +60,18 @@ public class DataJDBC {
     private static final String requeteSelectTestUserLogin = "select login from USER where login = ? and mdp = ?";
     
     
-
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * vérifiant l'existance du trio (loginA + dateDebut + loginB) dans la TABLE HISTORIQUESUIVI
+     */
+    private static final String requeteSelectHistoriqueSuiviLogins = "select dateDebut from HISTORIQUESUIVI where loginA = ? and loginB = ?";
+    
+    /**
+     * Squelette de la requête sql dans les valeurs<p>
+     * créant un nouvel historique de suivi entre 2 logins d'user et une date de début<p>
+     * dans la TABLE HISTORIQUESUIVI
+     */
+    private static final String requeteInsertHistoriqueSuivi = "insert into HISTORIQUESUIVI values (?, ?, ?, ? )";
     
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
@@ -95,6 +106,16 @@ public class DataJDBC {
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteSelectTestUserLoginSt = null;
+     /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteSelectHistoriqueSuiviLoginsSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteInsertHistoriqueSuiviSt = null;
     
     
  
@@ -158,8 +179,8 @@ public class DataJDBC {
                 //creation Table HISTORIQUESUIVI 
 	        s.execute("create table HISTORIQUESUIVI  ( " +
 	            		"loginA VARCHAR( 256 ) , " +
-                                "dateDebut DATE , " +
-                                "dateFin DATE , " +
+                                "dateDebut TIMESTAMP , " +
+                                "dateFin TIMESTAMP , " +
                                 "loginB VARCHAR( 256 ) , " +
 	        			"CONSTRAINT pk_historiquesuivi PRIMARY KEY(loginA, loginB ) , " +
                                         "CONSTRAINT fk_historiquesuivi_userA FOREIGN KEY(loginA ) REFERENCES USER(login ) , " +
@@ -221,6 +242,12 @@ public class DataJDBC {
                 requeteInsertUserSt = conn.prepareStatement(requeteInsertUser);
 
                 requeteSelectTestUserLoginSt = conn.prepareStatement(requeteSelectTestUserLogin);
+                
+                requeteInsertHistoriqueSuiviSt = conn.prepareStatement(requeteInsertHistoriqueSuivi);
+                
+                requeteSelectHistoriqueSuiviLoginsSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLogins);
+                
+
                     
 		    
 		    
@@ -300,7 +327,7 @@ public class DataJDBC {
                 System.out.println(obj.getUser(lo1));
             */ 
 
-             
+            /* 
                 //test insertUser()
                 System.out.println("test inserUser()");
                 String lo1, mdp1, nom1, prenom1, villeR;
@@ -328,7 +355,26 @@ public class DataJDBC {
                 System.out.println(obj.insertUser(lo1, mdp1, nom1, prenom1, mydate, villeR));
                 System.out.println("");
                 System.out.println(obj.getUser(lo1));
-            
+            */
+                
+                //test insertHistoriqueSuivi()
+                System.out.println("test inserHistoriqueSuivi()");
+                String log1, log2;Timestamp maintenant;
+                System.out.println("Votre login :");
+                log1 = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("login à suivre :");
+                log2 = sTestBDD.next(); //entree du login à suivre
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("");
+                
+                java.util.Date today = new java.util.Date();//recuperation de la date du jour
+                maintenant = new Timestamp(today.getTime());// recuperation du time actuelle
+                
+                System.out.println(obj.insertHistoriqueSuivi(log1, log2, maintenant));
+                System.out.println("");
+
+                
                 obj.close();
                 
                 
@@ -472,6 +518,40 @@ public class DataJDBC {
                         
                        System.out.println(1); 
                         retour = "Creation de l'user  : "+login+ " effectuée";
+                        
+                        
+                        return retour; 
+                }
+                } catch (SQLException e) {
+			e.printStackTrace();
+			return "-1";
+		}
+            
+        }
+        
+        public String insertHistoriqueSuivi(String logA, String logB, Timestamp debut)
+        {
+            String retour;
+            System.out.println("Tentative de suivi part : "+logA+" de: "+logB);
+            
+                try {
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(2, logB);
+                        ResultSet rs = requeteSelectHistoriqueSuiviLoginsSt.executeQuery();
+
+                if ( rs.next()) {
+                    
+                        retour = "login : " +logA+ " suit déjà login : "+logB+" depuis le : "+ rs.getTimestamp(1);
+	        	return retour;
+                } else {
+                        requeteInsertHistoriqueSuiviSt.setString(1,logA);
+                        requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
+                        requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
+                        requeteInsertHistoriqueSuiviSt.setString(4, logB);
+                        requeteInsertHistoriqueSuiviSt.executeUpdate();
+                        
+                       System.out.println(1); 
+                        retour = "Creation du suivi de l'user : "+logB+ " par l'user : "+logA+" effectué";
                         
                         
                         return retour; 
