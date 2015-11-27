@@ -65,14 +65,18 @@ public class DataJDBC {
      * vérifiant l'existance du trio (loginA + dateDebut + loginB) dans la TABLE HISTORIQUESUIVI
      */
     private static final String requeteSelectHistoriqueSuiviLogins = "select dateDebut from HISTORIQUESUIVI where loginA = ? and loginB = ?";
-    
     /**
      * Squelette de la requête sql dans les valeurs<p>
      * créant un nouvel historique de suivi entre 2 logins d'user et une date de début<p>
      * dans la TABLE HISTORIQUESUIVI
      */
     private static final String requeteInsertHistoriqueSuivi = "insert into HISTORIQUESUIVI values (?, ?, ?, ? )";
-    
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * récupérant toutes les infos d'historique de suivi entre 2 users<p>
+     * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
+     */
+    private static final String requeteGetHistoriqueSuivi = "select loginA, dateDebut, dateFin, loginB from HISTORIQUESUIVI where loginA = ? and loginB = ?";      
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
 
@@ -116,8 +120,11 @@ public class DataJDBC {
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteInsertHistoriqueSuiviSt = null;
-    
-    
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteGetHistoriqueSuiviSt = null;
  
     
     private PreparedStatement requeteUpdateRetraitSt = null;
@@ -243,14 +250,13 @@ public class DataJDBC {
 
                 requeteSelectTestUserLoginSt = conn.prepareStatement(requeteSelectTestUserLogin);
                 
+                requeteGetHistoriqueSuiviSt = conn.prepareStatement(requeteGetHistoriqueSuivi);
+                
                 requeteInsertHistoriqueSuiviSt = conn.prepareStatement(requeteInsertHistoriqueSuivi);
                 
                 requeteSelectHistoriqueSuiviLoginsSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLogins);
-                
-
-                    
-		    
-		    
+                                
+    
 		    
 		  //  requeteInsertEmprunterSt = conn.prepareStatement(requeteInsertEmprunter);
 		  //  requeteSelectTestEmprunterSt = conn.prepareStatement(requeteSelectTestEmprunter);
@@ -356,7 +362,7 @@ public class DataJDBC {
                 System.out.println("");
                 System.out.println(obj.getUser(lo1));
             */
-                
+            /*    
                 //test insertHistoriqueSuivi()
                 System.out.println("test inserHistoriqueSuivi()");
                 String log1, log2;Timestamp maintenant;
@@ -373,8 +379,24 @@ public class DataJDBC {
                 
                 System.out.println(obj.insertHistoriqueSuivi(log1, log2, maintenant));
                 System.out.println("");
-
+            */ 
+            /*    
+                //test getHistoriqueSuivi()
+                System.out.println("test getHistoriqueSuivi()");
+                String log1, log2;
+                System.out.println("Votre login :");
+                log1 = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("login du follower :");
+                log2 = sTestBDD.next(); //entree du login du follower
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("");
                 
+                System.out.println(obj.getHistoriqueSuivi(log1, log2));
+                System.out.println("");
+            */
+
+            
                 obj.close();
                 
                 
@@ -529,6 +551,42 @@ public class DataJDBC {
             
         }
         
+                /**
+         * 
+         * @param logA
+         * @param logB
+         * @return 
+         */
+	public String getHistoriqueSuivi(String logA, String logB)
+	{
+		// TODO Auto-generated method stub
+		System.out.println("Relation entre l'utilisateur : "+logA+" et l'utilisateur :" +logB);
+		try {
+			requeteGetHistoriqueSuiviSt.setString(1,logA);
+                        requeteGetHistoriqueSuiviSt.setString(2, logB);
+			ResultSet rs = requeteGetHistoriqueSuiviSt.executeQuery();
+			if (rs.next()) {
+				String retour = "Utilisateur = "+rs.getString(1) +"\n"+
+                                                "Follower = "+rs.getString(4) +"\n"+
+                                                "Depuis = "+rs.getTimestamp(2) +"\n"+
+                                                "Jusqu'au = "+rs.getTimestamp(3);
+				return retour;
+			} else {
+				return null;
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+        
+        /**
+         * 
+         * @param logA
+         * @param logB
+         * @param debut
+         * @return 
+         */
         public String insertHistoriqueSuivi(String logA, String logB, Timestamp debut)
         {
             String retour;
