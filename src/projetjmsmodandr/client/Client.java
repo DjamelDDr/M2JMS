@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package projetjmsmodandr.client;
+import java.sql.Timestamp;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -68,6 +69,10 @@ public class Client {
             // start the connection, to enable message sends
             connection.start();
 
+            java.util.Date today = new java.util.Date();//recuperation de la date du jour
+            Timestamp mydate = new Timestamp(today.getTime()); // recuperation du time actuelle
+
+            
             for (int i = 0; i < 6; ++i) {
                 
                 Tweet msg = new Tweet("contenuuuu","Toulouse",false);
