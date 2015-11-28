@@ -26,6 +26,8 @@ public class DurableSubscriber {
  * 
  */
     public static void main(String[] args) {
+            
+        System.out.println("icic"); 
         Context context = null;
         ConnectionFactory factory = null;
         Connection connection = null;
@@ -36,7 +38,7 @@ public class DurableSubscriber {
         Session session = null;
         TopicSubscriber subscriber = null;
         String subscriptionName = "rubADubSub";
-
+        System.out.println("AZERTY");
         if (args.length < 1 || args.length > 2) {
             System.out.println("usage: DurableSubscriber <topic> [count]");
             System.exit(1);
@@ -48,6 +50,7 @@ public class DurableSubscriber {
         }
 
         try {
+   
             // create the JNDI initial context.
             context = new InitialContext();
 
@@ -72,6 +75,7 @@ public class DurableSubscriber {
             connection.start();
 
             for (int i = 0; i < count; ++i) {
+                    
                 Message message = subscriber.receive();
                 if (message instanceof TextMessage) {
                     TextMessage text = (TextMessage) message;
