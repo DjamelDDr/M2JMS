@@ -5,13 +5,14 @@
  */
 package projetjmsmodandr.messages;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Djamel D
  */
-public class Message {
+public class Message implements Serializable{
     private String contenu;
     private String villeEmission;
     private boolean msgGeolocalise;
