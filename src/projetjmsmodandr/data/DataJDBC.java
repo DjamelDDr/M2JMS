@@ -65,6 +65,11 @@ public class DataJDBC {
      * vérifiant l'existance du trio (loginA + dateDebut + loginB) dans la TABLE HISTORIQUESUIVI
      */
     private static final String requeteSelectHistoriqueSuiviLogins = "select dateDebut from HISTORIQUESUIVI where loginA = ? and loginB = ?";
+        /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * vérifiant l'existance du trio (loginA + dateFin + loginB) dans la TABLE HISTORIQUESUIVI
+     */
+    private static final String requeteSelectHistoriqueSuiviLoginsDes = "select dateFin from HISTORIQUESUIVI where loginA = ? and loginB = ?";
     /**
      * Squelette de la requête sql dans les valeurs<p>
      * créant un nouvel historique de suivi entre 2 logins d'user et une date de début<p>
@@ -77,6 +82,12 @@ public class DataJDBC {
      * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
      */
     private static final String requeteGetHistoriqueSuivi = "select loginA, dateDebut, dateFin, loginB from HISTORIQUESUIVI where loginA = ? and loginB = ?";      
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * ajoutant une date de fin d'historique de suivi <p>
+     * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
+     */
+    private static final String requeteDelHistoriqueSuivi = "update HISTORIQUESUIVI set dateFin = ? where loginA = ? and loginB = ?";
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
 
@@ -119,12 +130,22 @@ public class DataJDBC {
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
      */ 
+    private PreparedStatement requeteSelectHistoriqueSuiviLoginsDesSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
     private PreparedStatement requeteInsertHistoriqueSuiviSt = null;
     /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteGetHistoriqueSuiviSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteDelHistoriqueSuiviSt = null;
  
     
     private PreparedStatement requeteUpdateRetraitSt = null;
@@ -254,9 +275,13 @@ public class DataJDBC {
                 
                 requeteInsertHistoriqueSuiviSt = conn.prepareStatement(requeteInsertHistoriqueSuivi);
                 
+                requeteDelHistoriqueSuiviSt = conn.prepareStatement(requeteDelHistoriqueSuivi);
+                
                 requeteSelectHistoriqueSuiviLoginsSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLogins);
+                
+                requeteSelectHistoriqueSuiviLoginsDesSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLoginsDes);
                                 
-    
+                
 		    
 		  //  requeteInsertEmprunterSt = conn.prepareStatement(requeteInsertEmprunter);
 		  //  requeteSelectTestEmprunterSt = conn.prepareStatement(requeteSelectTestEmprunter);
@@ -366,10 +391,10 @@ public class DataJDBC {
                 //test insertHistoriqueSuivi()
                 System.out.println("test inserHistoriqueSuivi()");
                 String log1, log2;Timestamp maintenant;
-                System.out.println("Votre login :");
+                System.out.println("Login à suivre :");
                 log1 = sTestBDD.next(); //entree du login
                 sTestBDD.nextLine(); //saute le retour a la ligne
-                System.out.println("login à suivre :");
+                System.out.println("Votre login  :");
                 log2 = sTestBDD.next(); //entree du login à suivre
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 System.out.println("");
@@ -387,7 +412,7 @@ public class DataJDBC {
                 System.out.println("Votre login :");
                 log1 = sTestBDD.next(); //entree du login
                 sTestBDD.nextLine(); //saute le retour a la ligne
-                System.out.println("login du follower :");
+                System.out.println("Login du follower :");
                 log2 = sTestBDD.next(); //entree du login du follower
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 System.out.println("");
@@ -395,6 +420,25 @@ public class DataJDBC {
                 System.out.println(obj.getHistoriqueSuivi(log1, log2));
                 System.out.println("");
             */
+               
+                //test delHistoriqueSuivi()
+                System.out.println("test delHistoriqueSuivi()");
+                String log1, log2;Timestamp maintenant;
+                System.out.println("Login à ne plus suivre :");
+                log1 = sTestBDD.next(); //entree du login à ne plus suivre
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("Votre login :");
+                log2 = sTestBDD.next(); //entree de votre login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("");
+                
+                
+                java.util.Date today = new java.util.Date();//recuperation de la date du jour
+                maintenant = new Timestamp(today.getTime());// recuperation du time actuelle
+                
+                System.out.println(obj.delHistoriqueSuivi(log1, log2, maintenant));
+                System.out.println("");
+            
 
             
                 obj.close();
@@ -551,7 +595,7 @@ public class DataJDBC {
             
         }
         
-                /**
+        /**
          * 
          * @param logA
          * @param logB
@@ -590,29 +634,46 @@ public class DataJDBC {
         public String insertHistoriqueSuivi(String logA, String logB, Timestamp debut)
         {
             String retour;
-            System.out.println("Tentative de suivi part : "+logA+" de: "+logB);
+            System.out.println("Tentative de suivi part : "+logB+" de: "+logA);
             
                 try {
                         requeteSelectHistoriqueSuiviLoginsSt.setString(1, logA);
                         requeteSelectHistoriqueSuiviLoginsSt.setString(2, logB);
                         ResultSet rs = requeteSelectHistoriqueSuiviLoginsSt.executeQuery();
+                        
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(2, logB);
+                        ResultSet rs1 = requeteSelectHistoriqueSuiviLoginsDesSt.executeQuery();
 
                 if ( rs.next()) {
                     
-                        retour = "login : " +logA+ " suit déjà login : "+logB+" depuis le : "+ rs.getTimestamp(1);
-	        	return retour;
-                } else {
+                    if (rs1.next())
+                    {
                         requeteInsertHistoriqueSuiviSt.setString(1,logA);
                         requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
                         requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
                         requeteInsertHistoriqueSuiviSt.setString(4, logB);
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
-                        
-                       System.out.println(1); 
-                        retour = "Creation du suivi de l'user : "+logB+ " par l'user : "+logA+" effectué";
-                        
-                        
+                        System.out.println(1); 
+                        retour = "(Réabonnement)Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
                         return retour; 
+                    }
+                    
+                        retour = "login : " +logB+ " suit déjà login : "+logA+" depuis le : "+ rs.getTimestamp(1);
+	        	return retour;
+                } else {
+                    
+                        requeteInsertHistoriqueSuiviSt.setString(1,logA);
+                        requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
+                        requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
+                        requeteInsertHistoriqueSuiviSt.setString(4, logB);
+                        requeteInsertHistoriqueSuiviSt.executeUpdate();
+                        System.out.println(1); 
+                        retour = "Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
+                        return retour; 
+                        
+                        
+                        
                 }
                 } catch (SQLException e) {
 			e.printStackTrace();
@@ -621,4 +682,55 @@ public class DataJDBC {
             
         }
 
+        /**
+         * 
+         * @param logA
+         * @param logB
+         * @param fin
+         * @return 
+         */
+        public String delHistoriqueSuivi(String logA, String logB, Timestamp fin)
+        {
+            String retour;
+            System.out.println("Tentative de désabonement part : "+logB+" à: "+logA);
+            
+                try {
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(2, logB);
+                        ResultSet rs = requeteSelectHistoriqueSuiviLoginsSt.executeQuery();
+                        
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(2, logB);
+                        ResultSet rs1 = requeteSelectHistoriqueSuiviLoginsDesSt.executeQuery();
+
+                if ( rs.next()) {
+                    
+                    if (rs1.next())
+                    {
+                        retour = "login : " +logB+ " est déjà désabonné au login : "+logA;
+	        	return retour;
+                    }
+                    
+                        requeteDelHistoriqueSuiviSt.setTimestamp(1, fin);
+                        requeteDelHistoriqueSuiviSt.setString(2, logA);
+                        requeteDelHistoriqueSuiviSt.setString(3, logB);
+                        requeteDelHistoriqueSuiviSt.executeUpdate();
+                        
+                        System.out.println(1); 
+                        retour = "Desabonnement à l'user : "+logA+ " par l'user : "+logB+" effectué";
+                        
+                        return retour; 
+                    
+                        
+                } else {
+                        
+                        retour = "login : " +logB+ " ne suit pas encore login : "+logA;
+	        	return retour;
+                }
+                } catch (SQLException e) {
+			e.printStackTrace();
+			return "-1";
+		}
+            
+        }
 }
