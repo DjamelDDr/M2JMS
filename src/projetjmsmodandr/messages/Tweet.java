@@ -12,7 +12,9 @@ import java.util.Date;
  *
  * @author Djamel D
  */
+
 public class Tweet implements Serializable{
+
     private String contenu;
     private String villeEmission;
     private boolean msgGeolocalise;
