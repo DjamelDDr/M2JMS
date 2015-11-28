@@ -5,22 +5,25 @@
  */
 package projetjmsmodandr.messages;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Djamel D
  */
-public class Message {
+
+public class Tweet implements Serializable{
+
     private String contenu;
     private String villeEmission;
     private boolean msgGeolocalise;
     private Date dateEmission;
 
     /**
-     * constructeur du message 
+     * constructeur du tweet 
      */
-    public Message(String contenu, String villeString, boolean msgGeolocalise){
+    public Tweet(String contenu, String villeString, boolean msgGeolocalise){
         this.contenu = contenu;
         this.villeEmission = villeEmission;
         this.msgGeolocalise =msgGeolocalise;
