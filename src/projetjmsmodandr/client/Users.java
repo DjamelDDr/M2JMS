@@ -31,6 +31,7 @@ public class Users {
         this.villeReceprion = villeReceprion;
     }
     /**
+     * 
      * @return the nom
      */
     public String getNom() {
