@@ -177,7 +177,7 @@ public class DataJDBC {
                                 "contenu VARCHAR( 500 ) , " +
                                 "villeEmission VARCHAR( 256 ) , " +
 	            		"geoActivee BOOLEAN , " +
-                                "dateEmission DATE , " +
+                                "dateEmission TIMESTAMP , " +
 	        			"CONSTRAINT pk_message PRIMARY KEY(login, dateEmission ) , " +
 	        			"CONSTRAINT fk_message_user FOREIGN KEY(login ) REFERENCES USER(login ) )"
 	        			);
