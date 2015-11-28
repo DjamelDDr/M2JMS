@@ -15,6 +15,8 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import projetjmsmodandr.messages.Tweet;
@@ -36,6 +38,7 @@ public class Client {
         Session session = null;
         MessageProducer sender = null;
        // String text = "Message ";
+        Queue queue = null;
        
         if (args.length < 1 || args.length > 2) {
             System.out.println("usage: Sender <destination> [count]");
@@ -66,6 +69,8 @@ public class Client {
             // create the sender
             sender = session.createProducer(dest);
 
+/*ARRIVE ICI**/
+            QueueBrowser browser = session.createBrowser(queue);
             // start the connection, to enable message sends
             connection.start();
 
