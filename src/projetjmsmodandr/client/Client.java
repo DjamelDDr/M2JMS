@@ -70,7 +70,7 @@ public class Client {
             sender = session.createProducer(dest);
 
 /*ARRIVE ICI**/
-            QueueBrowser browser = session.createBrowser(queue);
+            //QueueBrowser browser = session.createBrowser(queue);
             // start the connection, to enable message sends
             connection.start();
 
