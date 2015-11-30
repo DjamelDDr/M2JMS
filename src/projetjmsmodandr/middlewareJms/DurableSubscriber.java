@@ -82,6 +82,8 @@ public class DurableSubscriber {
                 if (message instanceof ObjectMessage) {
                     ObjectMessage om = (ObjectMessage) message;
                     Tweet tw = (Tweet)om.getObject();
+                    
+                    System.out.println("Contenu :"+ tw.getContenu());
                 } else if (message != null) {
                     System.out.println("Received non object message");
                 }
