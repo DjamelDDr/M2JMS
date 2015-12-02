@@ -150,7 +150,8 @@ public class DataJDBC {
     
     private PreparedStatement requeteUpdateRetraitSt = null;
 
-
+//autoincrement pour les messages
+    
     /**
      * Constructeur de la BDD
      * @param nomBD nom de la BDD
@@ -210,7 +211,7 @@ public class DataJDBC {
                                 "dateDebut TIMESTAMP , " +
                                 "dateFin TIMESTAMP , " +
                                 "loginB VARCHAR( 256 ) , " +
-	        			"CONSTRAINT pk_historiquesuivi PRIMARY KEY(loginA, loginB ) , " +
+	        			"CONSTRAINT pk_historiquesuivi PRIMARY KEY(loginA, loginB, dateDebut ) , " +
                                         "CONSTRAINT fk_historiquesuivi_userA FOREIGN KEY(loginA ) REFERENCES USER(login ) , " +
 	        			"CONSTRAINT fk_historiquesuivi_userB FOREIGN KEY(loginB ) REFERENCES USER(login ) )"
 	        			);
@@ -404,8 +405,8 @@ public class DataJDBC {
                 
                 System.out.println(obj.insertHistoriqueSuivi(log1, log2, maintenant));
                 System.out.println("");
-            */ 
-            /*    
+            */
+                
                 //test getHistoriqueSuivi()
                 System.out.println("test getHistoriqueSuivi()");
                 String log1, log2;
@@ -419,8 +420,8 @@ public class DataJDBC {
                 
                 System.out.println(obj.getHistoriqueSuivi(log1, log2));
                 System.out.println("");
-            */
-               
+            
+            /*   
                 //test delHistoriqueSuivi()
                 System.out.println("test delHistoriqueSuivi()");
                 String log1, log2;Timestamp maintenant;
@@ -438,8 +439,8 @@ public class DataJDBC {
                 
                 System.out.println(obj.delHistoriqueSuivi(log1, log2, maintenant));
                 System.out.println("");
+            */
             
-
             
                 obj.close();
                 
@@ -571,7 +572,7 @@ public class DataJDBC {
 
                 if ( rs.next()) {
                     
-                        retour = "login : " +login+ " déjà existant : ";
+                        retour = "0";
 	        	return retour;
                 } else {
                         requeteInsertUserSt.setString(1,login);
@@ -583,7 +584,7 @@ public class DataJDBC {
                         requeteInsertUserSt.executeUpdate();
                         
                        System.out.println(1); 
-                        retour = "Creation de l'user  : "+login+ " effectuée";
+                        retour = "1";
                         
                         
                         return retour; 
@@ -646,13 +647,13 @@ public class DataJDBC {
                         ResultSet rs1 = requeteSelectHistoriqueSuiviLoginsDesSt.executeQuery();
 
                 if ( rs.next()) {
-                    
-                    if (rs1.next())
+                    rs1.next();
+                    if (rs1.getTimestamp(1) != null)
                     {
                         requeteInsertHistoriqueSuiviSt.setString(1,logA);
                         requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
-                        requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
-                        requeteInsertHistoriqueSuiviSt.setString(4, logB);
+                        requeteInsertHistoriqueSuiviSt.setNull(3, 93);
+                        requeteInsertHistoriqueSuiviSt.setString(4, logB);                        
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
                         System.out.println(1); 
                         retour = "(Réabonnement)Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
@@ -665,7 +666,7 @@ public class DataJDBC {
                     
                         requeteInsertHistoriqueSuiviSt.setString(1,logA);
                         requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
-                        requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
+                        requeteInsertHistoriqueSuiviSt.setNull(3, 93);
                         requeteInsertHistoriqueSuiviSt.setString(4, logB);
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
                         System.out.println(1); 
@@ -705,7 +706,9 @@ public class DataJDBC {
 
                 if ( rs.next()) {
                     
-                    if (rs1.next())
+                    rs1.next();
+                    
+                    if (rs1.getTimestamp(1) != null)
                     {
                         retour = "login : " +logB+ " est déjà désabonné au login : "+logA;
 	        	return retour;

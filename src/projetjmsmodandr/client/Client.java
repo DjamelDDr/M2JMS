@@ -78,8 +78,8 @@ public class Client {
                 ObjectMessage objtweet = session.createObjectMessage(msg);
                 //le type ici c'est son reseau
                 objtweet.setJMSType("T1");
-                
-                System.out.println("Sent: " + msg.getContenu());
+                sender.send(objtweet);
+                System.out.println("Sent: " + msg.toString());
                 
             }
         } catch (JMSException exception) {

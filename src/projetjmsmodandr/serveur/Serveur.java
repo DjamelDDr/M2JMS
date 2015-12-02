@@ -83,11 +83,12 @@ public class Serveur {
 	            */
 	            while (true)  
 	            {
+                            System.out.println("test du receive");
 		            Message message = receiver3.receive();
 		            ObjectMessage om = (ObjectMessage) message;
 		            Tweet t = (Tweet) om.getObject();
-		            
-		            System.out.println("Received: " + t.getContenu());
+		            System.out.println("on se met en attente");
+		            System.out.println("Received: " + t.toString());
 	            	
 	            }
 	            

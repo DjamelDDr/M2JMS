@@ -78,9 +78,11 @@ public class Tweet implements Serializable{
     public void setDateEmission(Date dateEmission) {
         this.dateEmission = dateEmission;
     }
-    
-    /**
-     * 
-     */
+
+    @Override
+    public String toString() {
+        return "Tweet{" + "contenu=" + contenu + ", villeEmission=" + villeEmission + ", msgGeolocalise=" + msgGeolocalise + ", dateEmission=" + dateEmission + '}';
+    }
+
     
 }
