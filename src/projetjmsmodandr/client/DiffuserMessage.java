@@ -29,19 +29,19 @@ public class DiffuserMessage extends javax.swing.JFrame {
 
         textArea1 = new java.awt.TextArea();
         checkbox1 = new java.awt.Checkbox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        B_Envoyer = new javax.swing.JButton();
+        B_Retour_DiffuserMessage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         checkbox1.setLabel("Géolocalisation");
 
-        jButton1.setText("Envoyer");
+        B_Envoyer.setText("Envoyer");
 
-        jButton2.setText("Retour");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        B_Retour_DiffuserMessage.setText("Retour");
+        B_Retour_DiffuserMessage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                B_Retour_DiffuserMessageActionPerformed(evt);
             }
         });
 
@@ -55,9 +55,9 @@ public class DiffuserMessage extends javax.swing.JFrame {
                     .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(B_Retour_DiffuserMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(B_Envoyer, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(83, Short.MAX_VALUE))
         );
@@ -70,21 +70,21 @@ public class DiffuserMessage extends javax.swing.JFrame {
                 .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(B_Envoyer, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(B_Retour_DiffuserMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void B_Retour_DiffuserMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Retour_DiffuserMessageActionPerformed
 final Connexion frame = new Connexion();
 frame.setDefaultCloseOperation(Connexion.EXIT_ON_CLOSE);
 frame.setSize(400, 400);
 frame.setVisible(true);
 this.dispose();         // TODO ad        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_B_Retour_DiffuserMessageActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,9 +122,9 @@ this.dispose();         // TODO ad        // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton B_Envoyer;
+    private javax.swing.JButton B_Retour_DiffuserMessage;
     private java.awt.Checkbox checkbox1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private java.awt.TextArea textArea1;
     // End of variables declaration//GEN-END:variables
 }

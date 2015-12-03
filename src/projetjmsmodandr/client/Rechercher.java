@@ -28,22 +28,22 @@ public class Rechercher extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        Affichage_Rechercher = new javax.swing.JTextArea();
+        B_Selection = new javax.swing.JButton();
         textField1 = new java.awt.TextField();
-        button1 = new java.awt.Button();
-        jButton2 = new javax.swing.JButton();
+        B_Suivre = new java.awt.Button();
+        B_Retour_Rechercher = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        Affichage_Rechercher.setColumns(20);
+        Affichage_Rechercher.setRows(5);
+        jScrollPane1.setViewportView(Affichage_Rechercher);
 
-        jButton1.setText("Selection");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        B_Selection.setText("Selection");
+        B_Selection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                B_SelectionActionPerformed(evt);
             }
         });
 
@@ -54,17 +54,17 @@ public class Rechercher extends javax.swing.JFrame {
             }
         });
 
-        button1.setLabel("Suivre");
-        button1.addActionListener(new java.awt.event.ActionListener() {
+        B_Suivre.setLabel("Suivre");
+        B_Suivre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button1ActionPerformed(evt);
+                B_SuivreActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Retour");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        B_Retour_Rechercher.setText("Retour");
+        B_Retour_Rechercher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                B_Retour_RechercherActionPerformed(evt);
             }
         });
 
@@ -82,9 +82,9 @@ public class Rechercher extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(B_Selection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(B_Suivre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(B_Retour_Rechercher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,40 +92,40 @@ public class Rechercher extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                    .addComponent(B_Selection)
                     .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(B_Suivre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jButton2)))
+                        .addComponent(B_Retour_Rechercher)))
                 .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void B_SelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_SelectionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_B_SelectionActionPerformed
 
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField1ActionPerformed
 
-    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+    private void B_SuivreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_SuivreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_button1ActionPerformed
+    }//GEN-LAST:event_B_SuivreActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void B_Retour_RechercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Retour_RechercherActionPerformed
 final Connexion frame = new Connexion();
 frame.setDefaultCloseOperation(Connexion.EXIT_ON_CLOSE);
 frame.setSize(400, 400);
 frame.setVisible(true);
 this.dispose();         // TODO ad        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_B_Retour_RechercherActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,11 +163,11 @@ this.dispose();         // TODO ad        // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Button button1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextArea Affichage_Rechercher;
+    private javax.swing.JButton B_Retour_Rechercher;
+    private javax.swing.JButton B_Selection;
+    private java.awt.Button B_Suivre;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private java.awt.TextField textField1;
     // End of variables declaration//GEN-END:variables
 }

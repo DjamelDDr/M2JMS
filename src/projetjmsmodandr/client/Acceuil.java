@@ -29,10 +29,10 @@ public class Acceuil extends javax.swing.JFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        B_Connexion_Acceuil = new javax.swing.JButton();
         label1 = new java.awt.Label();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        B_Inscription_Acceuil = new javax.swing.JButton();
+        B_Quitter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,26 +40,26 @@ public class Acceuil extends javax.swing.JFrame {
 
         jTextField2.setText("Mdp");
 
-        jButton1.setText("Connexion");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        B_Connexion_Acceuil.setText("Connexion");
+        B_Connexion_Acceuil.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                B_Connexion_AcceuilMouseClicked(evt);
             }
         });
 
         label1.setText("                     Nouveau?Cliquez ci-dessous");
 
-        jButton2.setText("Inscription");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        B_Inscription_Acceuil.setText("Inscription");
+        B_Inscription_Acceuil.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                B_Inscription_AcceuilMouseClicked(evt);
             }
         });
 
-        jButton3.setText("Quitter");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        B_Quitter.setText("Quitter");
+        B_Quitter.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                B_QuitterMouseClicked(evt);
             }
         });
 
@@ -69,16 +69,16 @@ public class Acceuil extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(B_Quitter, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(91, 91, 91))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(B_Inscription_Acceuil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTextField1)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)))
+                    .addComponent(B_Connexion_Acceuil, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,39 +88,39 @@ public class Acceuil extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(60, 60, 60)
+                    .addComponent(B_Connexion_Acceuil))
+                .addGap(80, 80, 80)
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(B_Inscription_Acceuil)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(B_Quitter)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void B_QuitterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_QuitterMouseClicked
 System.exit(0);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3MouseClicked
+    }//GEN-LAST:event_B_QuitterMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void B_Inscription_AcceuilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Inscription_AcceuilMouseClicked
 final Inscription frame = new Inscription();
 frame.setDefaultCloseOperation(Inscription.EXIT_ON_CLOSE);
 frame.setSize(400, 400);
 frame.setVisible(true);
 this.dispose();
 // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_B_Inscription_AcceuilMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void B_Connexion_AcceuilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Connexion_AcceuilMouseClicked
 final Connexion frame = new Connexion();
 frame.setDefaultCloseOperation(Connexion.EXIT_ON_CLOSE);
 frame.setSize(400, 400);
 frame.setVisible(true);
 this.dispose();         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_B_Connexion_AcceuilMouseClicked
 
     /**
      * @param args the command line arguments
@@ -158,9 +158,9 @@ this.dispose();         // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton B_Connexion_Acceuil;
+    private javax.swing.JButton B_Inscription_Acceuil;
+    private javax.swing.JButton B_Quitter;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private java.awt.Label label1;

@@ -32,8 +32,8 @@ public class Inscription extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        B_Inscription_This = new javax.swing.JButton();
+        B_Retour_Inscription = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         textField1 = new java.awt.TextField();
@@ -57,22 +57,22 @@ public class Inscription extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Inscription");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        B_Inscription_This.setText("Inscription");
+        B_Inscription_This.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                B_Inscription_ThisMouseClicked(evt);
             }
         });
 
-        jButton2.setText("Retour");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        B_Retour_Inscription.setText("Retour");
+        B_Retour_Inscription.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                B_Retour_InscriptionMouseClicked(evt);
             }
         });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        B_Retour_Inscription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                B_Retour_InscriptionActionPerformed(evt);
             }
         });
 
@@ -100,7 +100,7 @@ public class Inscription extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField3)
                             .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(B_Inscription_This, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -108,7 +108,7 @@ public class Inscription extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(B_Retour_Inscription, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(118, 118, 118))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jLabel2)
@@ -129,13 +129,13 @@ public class Inscription extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(B_Inscription_This))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addGap(44, 44, 44)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(B_Retour_Inscription)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -146,22 +146,22 @@ public class Inscription extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void B_Inscription_ThisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Inscription_ThisMouseClicked
 jLabel1.setForeground(Color.yellow);      // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_B_Inscription_ThisMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void B_Retour_InscriptionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Retour_InscriptionMouseClicked
         // TODO add your handling code here:
         final Acceuil frame = new Acceuil();
         frame.setDefaultCloseOperation(Inscription.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
         frame.setVisible(true);
         this.dispose();  
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_B_Retour_InscriptionMouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void B_Retour_InscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Retour_InscriptionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_B_Retour_InscriptionActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -203,8 +203,8 @@ jLabel1.setForeground(Color.yellow);      // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton B_Inscription_This;
+    private javax.swing.JButton B_Retour_Inscription;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
