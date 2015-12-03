@@ -58,13 +58,18 @@ public class DataJDBC {
      * testant la véracité du login et mdp dans la TABLE USER
      */
     private static final String requeteSelectTestUserLogin = "select login from USER where login = ? and mdp = ?";
-    
+   
     
     /**
      * Squelette de la requête sql sans les valeurs<p>
      * vérifiant l'existance du trio (loginA + dateDebut + loginB) dans la TABLE HISTORIQUESUIVI
      */
     private static final String requeteSelectHistoriqueSuiviLogins = "select dateDebut from HISTORIQUESUIVI where loginA = ? and loginB = ?";
+        /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * vérifiant l'existance du trio (loginA + dateFin + loginB) dans la TABLE HISTORIQUESUIVI
+     */
+    private static final String requeteSelectHistoriqueSuiviLoginsDes = "select dateFin from HISTORIQUESUIVI where loginA = ? and loginB = ?";
     /**
      * Squelette de la requête sql dans les valeurs<p>
      * créant un nouvel historique de suivi entre 2 logins d'user et une date de début<p>
@@ -77,9 +82,29 @@ public class DataJDBC {
      * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
      */
     private static final String requeteGetHistoriqueSuivi = "select loginA, dateDebut, dateFin, loginB from HISTORIQUESUIVI where loginA = ? and loginB = ?";      
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * ajoutant une date de fin d'historique de suivi <p>
+     * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
+     */
+    private static final String requeteDelHistoriqueSuivi = "update HISTORIQUESUIVI set dateFin = ? where loginA = ? and loginB = ?";
+    
+    
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * créant un nouveau avec toutes ses infos dans la TABLE TWEETBD
+     */
+    private static final String requeteInsertTweetBD = "insert into TWEETBD (login, contenu, villeEmission, geoActivee, dateEmission) values (?, ?, ?, ?, ? )";
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * récupérant toutes les infos d'un message dans la TABLE TWEETBD grâce à son login
+     */
+    private static final String requeteGetTweetBD = "select idTweet, login, contenu, villeEmission, geoActivee, dateEmission from TWEETBD where login = ?";
+    
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
 
+    
     /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
@@ -110,11 +135,18 @@ public class DataJDBC {
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteSelectTestUserLoginSt = null;
+    
+    
      /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteSelectHistoriqueSuiviLoginsSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteSelectHistoriqueSuiviLoginsDesSt = null;
     /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
@@ -125,11 +157,27 @@ public class DataJDBC {
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteGetHistoriqueSuiviSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteDelHistoriqueSuiviSt = null;
  
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */
+    private PreparedStatement requeteInsertTweetBDSt = null;
+        /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */
+    private PreparedStatement requeteGetTweetBDSt = null;
     
     private PreparedStatement requeteUpdateRetraitSt = null;
 
-
+//autoincrement pour les messages
+    
     /**
      * Constructeur de la BDD
      * @param nomBD nom de la BDD
@@ -171,14 +219,14 @@ public class DataJDBC {
         	s.executeUpdate("insert into USER values ('djadja','nonnon','drif','djamel',{ts '2015-02-14 06:08:36.69'},'Toulouse')");
                 
                 
-              	//creation Table MESSAGE 
-	        s.execute("create table MESSAGE  ( " +
-	            		"login VARCHAR( 256 ) , " +
+              	//creation Table TWEETBD 
+	        s.execute("create table TWEETBD  ( " +
+	            		"idTweet IDENTITY , " +
+                                "login VARCHAR( 256 ) , " +
                                 "contenu VARCHAR( 500 ) , " +
                                 "villeEmission VARCHAR( 256 ) , " +
 	            		"geoActivee BOOLEAN , " +
-                                "dateEmission DATE , " +
-	        			"CONSTRAINT pk_message PRIMARY KEY(login, dateEmission ) , " +
+                                "dateEmission TIMESTAMP , " +
 	        			"CONSTRAINT fk_message_user FOREIGN KEY(login ) REFERENCES USER(login ) )"
 	        			);
                 
@@ -189,7 +237,7 @@ public class DataJDBC {
                                 "dateDebut TIMESTAMP , " +
                                 "dateFin TIMESTAMP , " +
                                 "loginB VARCHAR( 256 ) , " +
-	        			"CONSTRAINT pk_historiquesuivi PRIMARY KEY(loginA, loginB ) , " +
+	        			"CONSTRAINT pk_historiquesuivi PRIMARY KEY(loginA, loginB, dateDebut ) , " +
                                         "CONSTRAINT fk_historiquesuivi_userA FOREIGN KEY(loginA ) REFERENCES USER(login ) , " +
 	        			"CONSTRAINT fk_historiquesuivi_userB FOREIGN KEY(loginB ) REFERENCES USER(login ) )"
 	        			);
@@ -254,9 +302,16 @@ public class DataJDBC {
                 
                 requeteInsertHistoriqueSuiviSt = conn.prepareStatement(requeteInsertHistoriqueSuivi);
                 
+                requeteDelHistoriqueSuiviSt = conn.prepareStatement(requeteDelHistoriqueSuivi);
+                
                 requeteSelectHistoriqueSuiviLoginsSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLogins);
+                
+                requeteSelectHistoriqueSuiviLoginsDesSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLoginsDes);
                                 
-    
+                
+                requeteInsertTweetBDSt = conn.prepareStatement(requeteInsertTweetBD);
+                
+                requeteGetTweetBDSt = conn.prepareStatement(requeteGetTweetBD);
 		    
 		  //  requeteInsertEmprunterSt = conn.prepareStatement(requeteInsertEmprunter);
 		  //  requeteSelectTestEmprunterSt = conn.prepareStatement(requeteSelectTestEmprunter);
@@ -366,10 +421,10 @@ public class DataJDBC {
                 //test insertHistoriqueSuivi()
                 System.out.println("test inserHistoriqueSuivi()");
                 String log1, log2;Timestamp maintenant;
-                System.out.println("Votre login :");
+                System.out.println("Login à suivre :");
                 log1 = sTestBDD.next(); //entree du login
                 sTestBDD.nextLine(); //saute le retour a la ligne
-                System.out.println("login à suivre :");
+                System.out.println("Votre login  :");
                 log2 = sTestBDD.next(); //entree du login à suivre
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 System.out.println("");
@@ -379,7 +434,7 @@ public class DataJDBC {
                 
                 System.out.println(obj.insertHistoriqueSuivi(log1, log2, maintenant));
                 System.out.println("");
-            */ 
+            */
             /*    
                 //test getHistoriqueSuivi()
                 System.out.println("test getHistoriqueSuivi()");
@@ -387,7 +442,7 @@ public class DataJDBC {
                 System.out.println("Votre login :");
                 log1 = sTestBDD.next(); //entree du login
                 sTestBDD.nextLine(); //saute le retour a la ligne
-                System.out.println("login du follower :");
+                System.out.println("Login du follower :");
                 log2 = sTestBDD.next(); //entree du login du follower
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 System.out.println("");
@@ -395,7 +450,71 @@ public class DataJDBC {
                 System.out.println(obj.getHistoriqueSuivi(log1, log2));
                 System.out.println("");
             */
-
+            /*   
+                //test delHistoriqueSuivi()
+                System.out.println("test delHistoriqueSuivi()");
+                String log1, log2;Timestamp maintenant;
+                System.out.println("Login à ne plus suivre :");
+                log1 = sTestBDD.next(); //entree du login à ne plus suivre
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("Votre login :");
+                log2 = sTestBDD.next(); //entree de votre login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("");
+                
+                
+                java.util.Date today = new java.util.Date();//recuperation de la date du jour
+                maintenant = new Timestamp(today.getTime());// recuperation du time actuelle
+                
+                System.out.println(obj.delHistoriqueSuivi(log1, log2, maintenant));
+                System.out.println("");
+            */
+            
+                
+            /*
+                //test insertTweetBD()
+                System.out.println("test inserTweetBD()");
+                String lo1, cntnu, vEmiss, repGeo;
+                Boolean geo = false;
+                Timestamp mydate;
+                System.out.println("login :");
+                lo1 = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("contenu : (max 500 carac) ");
+                cntnu = sTestBDD.nextLine(); //entree du mess
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("ville d'emision :");
+                vEmiss = sTestBDD.next(); //entree de la ville d'emission
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("geolocalisation :(Y/N) ??");
+                repGeo = sTestBDD.next();//entree du prenom
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                    if (repGeo.equalsIgnoreCase("Y"))
+                    {
+                           geo = true;
+                    }else
+                        {
+                            geo = false;
+                        }
+                    
+                System.out.println("");
+                
+                java.util.Date today = new java.util.Date();//recuperation de la date du jour
+                mydate = new Timestamp(today.getTime());// recuperation du time actuelle
+                
+                System.out.println(obj.insertTweetBD(lo1, cntnu, vEmiss, geo, mydate));
+                System.out.println("");
+            */
+            
+                //test getTweetBD()
+                System.out.println("test getTweetBD()");
+                String loT;
+                System.out.println("login :");
+                loT = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                
+                System.out.println(obj.getTweetBD(loT));
+                System.out.println("");
             
                 obj.close();
                 
@@ -527,7 +646,7 @@ public class DataJDBC {
 
                 if ( rs.next()) {
                     
-                        retour = "login : " +login+ " déjà existant : ";
+                        retour = "0";
 	        	return retour;
                 } else {
                         requeteInsertUserSt.setString(1,login);
@@ -539,7 +658,7 @@ public class DataJDBC {
                         requeteInsertUserSt.executeUpdate();
                         
                        System.out.println(1); 
-                        retour = "Creation de l'user  : "+login+ " effectuée";
+                        retour = "1";
                         
                         
                         return retour; 
@@ -551,7 +670,7 @@ public class DataJDBC {
             
         }
         
-                /**
+        /**
          * 
          * @param logA
          * @param logB
@@ -560,24 +679,41 @@ public class DataJDBC {
 	public String getHistoriqueSuivi(String logA, String logB)
 	{
 		// TODO Auto-generated method stub
+                String retour=""; 
 		System.out.println("Relation entre l'utilisateur : "+logA+" et l'utilisateur :" +logB);
 		try {
 			requeteGetHistoriqueSuiviSt.setString(1,logA);
                         requeteGetHistoriqueSuiviSt.setString(2, logB);
 			ResultSet rs = requeteGetHistoriqueSuiviSt.executeQuery();
-			if (rs.next()) {
-				String retour = "Utilisateur = "+rs.getString(1) +"\n"+
+                        
+   
+                        
+			while (rs.next()) {
+                            
+                                     retour  += "Utilisateur = "+rs.getString(1) +"\n"+
                                                 "Follower = "+rs.getString(4) +"\n"+
                                                 "Depuis = "+rs.getTimestamp(2) +"\n"+
-                                                "Jusqu'au = "+rs.getTimestamp(3);
-				return retour;
-			} else {
-				return null;
-			}
+                                                "Jusqu'au = "+rs.getTimestamp(3)+"\n"+
+                                                "  ---------- "+"\n";
+				
+                                    //System.out.println(retour);
+                                     //return retour;
+                                    
+			} //else {
+                        if(retour.equals("")){
+                            
+                            return null;
+                           
+                        }else{
+                            return retour;
+                            
+                        }        
+			//}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
+                //return retour;
 	}
         
         /**
@@ -590,29 +726,46 @@ public class DataJDBC {
         public String insertHistoriqueSuivi(String logA, String logB, Timestamp debut)
         {
             String retour;
-            System.out.println("Tentative de suivi part : "+logA+" de: "+logB);
+            System.out.println("Tentative de suivi part : "+logB+" de: "+logA);
             
                 try {
                         requeteSelectHistoriqueSuiviLoginsSt.setString(1, logA);
                         requeteSelectHistoriqueSuiviLoginsSt.setString(2, logB);
                         ResultSet rs = requeteSelectHistoriqueSuiviLoginsSt.executeQuery();
+                        
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(2, logB);
+                        ResultSet rs1 = requeteSelectHistoriqueSuiviLoginsDesSt.executeQuery();
 
                 if ( rs.next()) {
-                    
-                        retour = "login : " +logA+ " suit déjà login : "+logB+" depuis le : "+ rs.getTimestamp(1);
-	        	return retour;
-                } else {
+                    rs1.next();
+                    if (rs1.getTimestamp(1) != null)
+                    {
                         requeteInsertHistoriqueSuiviSt.setString(1,logA);
                         requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
-                        requeteInsertHistoriqueSuiviSt.setTimestamp(3, null);
+                        requeteInsertHistoriqueSuiviSt.setNull(3, 93);
+                        requeteInsertHistoriqueSuiviSt.setString(4, logB);                        
+                        requeteInsertHistoriqueSuiviSt.executeUpdate();
+                        System.out.println(1); 
+                        retour = "(Réabonnement)Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
+                        return retour; 
+                    }
+                    
+                        retour = "login : " +logB+ " suit déjà login : "+logA+" depuis le : "+ rs.getTimestamp(1);
+	        	return retour;
+                } else {
+                    
+                        requeteInsertHistoriqueSuiviSt.setString(1,logA);
+                        requeteInsertHistoriqueSuiviSt.setTimestamp(2, debut);
+                        requeteInsertHistoriqueSuiviSt.setNull(3, 93);
                         requeteInsertHistoriqueSuiviSt.setString(4, logB);
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
-                        
-                       System.out.println(1); 
-                        retour = "Creation du suivi de l'user : "+logB+ " par l'user : "+logA+" effectué";
-                        
-                        
+                        System.out.println(1); 
+                        retour = "Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
                         return retour; 
+                        
+                        
+                        
                 }
                 } catch (SQLException e) {
 			e.printStackTrace();
@@ -621,4 +774,180 @@ public class DataJDBC {
             
         }
 
+        /**
+         * 
+         * @param logA
+         * @param logB
+         * @param fin
+         * @return 
+         */
+        public String delHistoriqueSuivi(String logA, String logB, Timestamp fin)
+        {
+            String retour;
+            System.out.println("Tentative de désabonement part : "+logB+" à: "+logA);
+            
+                try {
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsSt.setString(2, logB);
+                        ResultSet rs = requeteSelectHistoriqueSuiviLoginsSt.executeQuery();
+                        
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(1, logA);
+                        requeteSelectHistoriqueSuiviLoginsDesSt.setString(2, logB);
+                        ResultSet rs1 = requeteSelectHistoriqueSuiviLoginsDesSt.executeQuery();
+
+                if ( rs.next()) {
+                    
+                    rs1.next();
+                    
+                    if (rs1.getTimestamp(1) != null)
+                    {
+                        retour = "login : " +logB+ " est déjà désabonné au login : "+logA;
+	        	return retour;
+                    }
+                    
+                        requeteDelHistoriqueSuiviSt.setTimestamp(1, fin);
+                        requeteDelHistoriqueSuiviSt.setString(2, logA);
+                        requeteDelHistoriqueSuiviSt.setString(3, logB);
+                        requeteDelHistoriqueSuiviSt.executeUpdate();
+                        
+                        System.out.println(1); 
+                        retour = "Desabonnement à l'user : "+logA+ " par l'user : "+logB+" effectué";
+                        
+                        return retour; 
+                    
+                        
+                } else {
+                        
+                        retour = "login : " +logB+ " ne suit pas encore login : "+logA;
+	        	return retour;
+                }
+                } catch (SQLException e) {
+			e.printStackTrace();
+			return "-1";
+		}
+            
+        }
+        
+        
+        
+        /**
+         * Insert un nouveau message
+         * @param login identifiant d'un user
+         * @param contenu le texte du message
+         * @param villeEmission ville d'emission du message
+         * @param geoActivee option de geolocalisation du message
+         * @param dtEmission date de d'emission du message
+         * @return retour - login déja existant ou  les infos du nouvel user
+         */
+        public String insertTweetBD(String login, String contenu, String villeEmission, Boolean geoActivee, Timestamp dtEmission)
+        {
+                String retour;
+                System.out.println("Tentative d'enregistrement du tweet de : "+login);
+
+                try {
+                        requeteInsertTweetBDSt.setString(1, login);
+                        requeteInsertTweetBDSt.setString(2, contenu);
+                        requeteInsertTweetBDSt.setString(3, villeEmission);
+                        requeteInsertTweetBDSt.setBoolean(4, geoActivee);
+                        requeteInsertTweetBDSt.setTimestamp(5, dtEmission);
+                        requeteInsertTweetBDSt.executeUpdate();
+ 
+    
+                       System.out.println(1); 
+                        retour = "1";
+                        
+                        
+                        return retour;
+                        
+     
+                   // retour = "0";
+	        	//return retour;
+                
+                } catch (SQLException e) {
+			e.printStackTrace();
+			return "-1";
+		}
+            
+        }
+        
+        /**
+         * 
+         * @param logA
+         * @return 
+         */
+	public String getTweetBD(String logA)
+	{
+		// TODO Auto-generated method stub
+                String retour=""; 
+		System.out.println("Recupération des tweet de : "+logA);
+		try {
+			requeteGetTweetBDSt.setString(1,logA);
+			ResultSet rs = requeteGetTweetBDSt.executeQuery();
+                        
+   
+                        
+			while (rs.next()) {
+                            
+                                     retour  += "Login = "+rs.getString(2) +"\n"+
+                                                "Tweet N° = "+rs.getInt(1) +"\n"+
+                                                "Contenu = "+rs.getString(3) +"\n"+
+                                                "Ville d'Emission = "+rs.getString(4) +"\n"+
+                                                "Géolocalisé = "+rs.getBoolean(5) +"\n"+
+                                                "Date d'Emission = "+rs.getTimestamp(6)+"\n"+
+                                                "  ---------- "+"\n";
+				
+                                    //System.out.println(retour);
+                                     //return retour;
+                                    
+			} //else {
+                        if(retour.equals("")){
+                            System.out.println("Aucun tweet Envoyé");
+                            return null;
+                           
+                        }else{
+                            return retour;
+                            
+                        }        
+			//}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+                //return retour;
+	}
+        
+        /**
+        * Supprimes un user
+        * @param login identifiant d'un user
+        * @param mdp mot de passe d'un user
+        * @return false - login et/ou mdp n'existe pas ou true
+        **/
+        public boolean delTweet(String login,String mdp)
+	{
+
+		System.out.println("Tentative de suppression de l'user : "+login+ " Mdp :"+mdp);
+		
+		try {
+			requeteSelectTestUserLoginSt.setString(1,login);
+			requeteSelectTestUserLoginSt.setString(2,mdp);
+			
+			ResultSet rs = requeteSelectTestUserLoginSt.executeQuery();
+			
+	        if (! rs.next()) {
+	        	
+	        	System.out.println("login ou/et mdp n'existe pas : " +login+ " Mdp :"+mdp);
+	        	return false;
+	        } else {
+	        	requeteDeleteUserSt.setString(1, login);
+	        	requeteDeleteUserSt.setString(2, mdp);
+	        	requeteDeleteUserSt.executeUpdate();
+	        	System.out.println(" Suppression de l'user : "+login+ " effectuée" );
+	        	return true;
+	        	
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

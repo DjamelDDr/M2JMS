@@ -16,10 +16,11 @@ import javax.jms.ConnectionFactory;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
+
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import projetjmsmodandr.messages.Tweet;
+
 
 import javax.swing.JFrame;
 
@@ -33,6 +34,7 @@ import projetjmsmodandr.messages.Tweet;
 
 
 public class Client {
+
        public static void main(String[] args) {
            
         
@@ -52,26 +54,27 @@ public class Client {
         MessageProducer sender = null;
         
         MessageConsumer receveurMsg = null;
+
        // String text = "Message ";
        
         if (args.length < 1 || args.length > 2) {
             System.out.println("usage: Sender <destination> [count]");
             System.exit(1);
         }
-        
-        //   System.out.println("args[0]"+args[0]+"args[1]"+args[1] );
+
         destName = args[0];
         if (args.length == 2) {
             count = Integer.parseInt(args[1]);
         }
 
         try {
-            destNameFile = "queue1";
+
             // create the JNDI initial context.
             context = new InitialContext();
 
             // look up the ConnectionFactory
             factory = (ConnectionFactory) context.lookup(factoryName);
+
         // look up the Destination
             dest = (Destination) context.lookup(destName);          
             
@@ -80,12 +83,14 @@ public class Client {
             connection = factory.createConnection();
             //création de la connection pour la file temporaire
             
+
             // create the session
             session = connection.createSession(
                 false, Session.AUTO_ACKNOWLEDGE);
 
             // create the sender
             sender = session.createProducer(dest);
+
             //l'envoi de message dans la file d'attente temporaire
             receveurMsg = session.createConsumer(destFileTmp, "JMSType IN ('T1','T2') ");
             
@@ -103,12 +108,15 @@ public class Client {
 
             for (int i = 0; i < 6; ++i) {
             
+
                 Tweet msg = new Tweet("contenuuuu","Toulouse",false);
                 ObjectMessage objtweet = session.createObjectMessage(msg);
                 //le type ici c'est son reseau
                 objtweet.setJMSType("T1");
                 sender.send(objtweet);
+
                 System.out.println("Sent: " +  msg.getContenu());
+
                 
             }
         } catch (JMSException exception) {
