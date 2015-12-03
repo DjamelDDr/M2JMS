@@ -15,8 +15,10 @@ import javax.jms.Destination;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import projetjmsmodandr.messages.Tweet;
 
 /**
  *
@@ -69,10 +71,12 @@ public class Sender /*extends Thread*/{
             connection.start();
 
             for (int i = 0; i < count; ++i) {
-                TextMessage message = session.createTextMessage();
-                message.setText(text + (i + 1));
-                sender.send(message);
-                System.out.println("Sent: " + message.getText());
+                Tweet msg = new Tweet("con111tenu222uuu","Toulouse",false);
+                ObjectMessage objtweet = session.createObjectMessage(msg);
+                //le type ici c'est son reseau
+                objtweet.setJMSType("T4");
+                sender.send(objtweet);
+                //System.out.println("Sent: " +  msg.getContenu());
             }
         } catch (JMSException exception) {
             exception.printStackTrace();

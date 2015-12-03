@@ -16,6 +16,8 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.jms.JMSException;
 import javax.jms.Destination;
+import javax.jms.ObjectMessage;
+import projetjmsmodandr.messages.Tweet;
 /**
  *
  * @author Djamel D
@@ -26,8 +28,8 @@ public class DurableSubscriber {
  * 
  */
     public static void main(String[] args) {
-            
-        System.out.println("icic"); 
+        //    System.out.println("Argument 1 : "+args[0]+", argument 2 : "+args[1]);
+        //System.out.println("icic"); 
         Context context = null;
         ConnectionFactory factory = null;
         Connection connection = null;
@@ -37,8 +39,8 @@ public class DurableSubscriber {
         int count = 1;
         Session session = null;
         TopicSubscriber subscriber = null;
-        String subscriptionName = "rubADubSub";
-        System.out.println("AZERTY");
+        String subscriptionName = "TWEETER";
+        
         if (args.length < 1 || args.length > 2) {
             System.out.println("usage: DurableSubscriber <topic> [count]");
             System.exit(1);
@@ -77,11 +79,13 @@ public class DurableSubscriber {
             for (int i = 0; i < count; ++i) {
                     
                 Message message = subscriber.receive();
-                if (message instanceof TextMessage) {
-                    TextMessage text = (TextMessage) message;
-                    System.out.println("Received: " + text.getText());
+                if (message instanceof ObjectMessage) {
+                    ObjectMessage om = (ObjectMessage) message;
+                    Tweet tw = (Tweet)om.getObject();
+                    
+                    System.out.println("Contenu :"+ tw.getContenu());
                 } else if (message != null) {
-                    System.out.println("Received non text message");
+                    System.out.println("Received non object message");
                 }
             }
         } catch (JMSException exception) {
