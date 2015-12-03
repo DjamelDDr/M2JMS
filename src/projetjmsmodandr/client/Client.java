@@ -16,13 +16,13 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.swing.JFrame;
 import projetjmsmodandr.messages.Tweet;
 
 
-/**
- *
- * @author Djamel D
- */
+
+
+
 public class Client {
        public static void main(String[] args) {
         Context context = null;
