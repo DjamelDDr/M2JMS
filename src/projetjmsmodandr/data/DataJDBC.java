@@ -100,6 +100,11 @@ public class DataJDBC {
      * récupérant toutes les infos d'un message dans la TABLE TWEETBD grâce à son login
      */
     private static final String requeteGetTweetBD = "select idTweet, login, contenu, villeEmission, geoActivee, dateEmission from TWEETBD where login = ?";
+        /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * récupérant toutes les infos d'un message dans la TABLE TWEETBD grâce à son login
+     */
+    private static final String requeteDelTweetBD = "delete from TWEETBD where login = ? and idTweet = ?";
     
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
@@ -168,11 +173,16 @@ public class DataJDBC {
      * (squelette + valeurs)
      */
     private PreparedStatement requeteInsertTweetBDSt = null;
-        /**
+    /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
      */
     private PreparedStatement requeteGetTweetBDSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */
+    private PreparedStatement requeteDelTweetBDSt = null;
     
     private PreparedStatement requeteUpdateRetraitSt = null;
 
