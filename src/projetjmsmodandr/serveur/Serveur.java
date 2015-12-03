@@ -60,7 +60,7 @@ public class Serveur {
             java.util.Date today = new java.util.Date();//recuperation de la date du jour
             mydate = new Timestamp(today.getTime());// recuperation du time actuelle
 
-           // DataJDBC db = new DataJDBC("maBddTwitter");
+            DataJDBC db = new DataJDBC("maBddTwitter");
             
             
             while (true)  

@@ -18,6 +18,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import projetjmsmodandr.data.DataJDBC;
 import projetjmsmodandr.messages.Tweet;
 
 /**
@@ -69,8 +70,11 @@ public class Sender /*extends Thread*/{
 
             // start the connection, to enable message sends
             connection.start();
-
+            
+            DataJDBC db = new DataJDBC("maBddTwitter");
+            
             for (int i = 0; i < count; ++i) {
+                
                 Tweet msg = new Tweet("con111tenu222uuu","Toulouse",false);
                 ObjectMessage objtweet = session.createObjectMessage(msg);
                 //le type ici c'est son reseau
