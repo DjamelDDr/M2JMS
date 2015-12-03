@@ -25,7 +25,7 @@ public class Tweet implements Serializable{
      */
     public Tweet(String contenu, String villeString, boolean msgGeolocalise){
         this.contenu = contenu;
-        this.villeEmission = villeEmission;
+        this.villeEmission = villeString;
         this.msgGeolocalise =msgGeolocalise;
         this.dateEmission = new Date();
     }

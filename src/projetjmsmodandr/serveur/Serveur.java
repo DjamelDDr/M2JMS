@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package projetjmsmodandr.serveur;
+import java.sql.Timestamp;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -16,6 +17,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
+import projetjmsmodandr.data.DataJDBC;
 import projetjmsmodandr.messages.Tweet;
 /**
  *
@@ -46,51 +48,34 @@ public class Serveur {
         }
 
         try {
-            // create the JNDI initial context
             context = new InitialContext();
-
-            // look up the ConnectionFactory
             factory = (ConnectionFactory) context.lookup(factoryName);
-
-            // look up the Destination
             dest = (Destination) context.lookup(destName);
-
-            // create the connection
             connection = factory.createConnection();
-
-            // create the session
-            session = connection.createSession(
-                false, Session.AUTO_ACKNOWLEDGE);
-
-            // create the receiver
-            //receiver = session.createConsumer(dest);
-
-            // create the receiver avec le type
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             receiver3 = session.createConsumer(dest, "JMSType IN ('T1','T2') ");
-
-            // start the connection, to enable message receipt
             connection.start();
+            Timestamp mydate;
 
-            /*
-            for (int i = 0; i < count; ++i) {
-                Message message = receiver.receive();
-                if (message instanceof TextMessage) {
-                    TextMessage text = (TextMessage) message;
-                    System.out.println("Received: " + text.getText());
-                } else if (message != null) {
-                    System.out.println("Received non text message");
-                }
-            }*/
+            java.util.Date today = new java.util.Date();//recuperation de la date du jour
+            mydate = new Timestamp(today.getTime());// recuperation du time actuelle
 
-        while (true)  
-        {
-            System.out.println("AZERTY");
-            Message message = receiver3.receive();
-            ObjectMessage om = (ObjectMessage) message;
-            Tweet t = (Tweet) om.getObject();
+           // DataJDBC db = new DataJDBC("maBddTwitter");
             
-            System.out.println("Received: " + t.getContenu());
-        }
+            
+            while (true)  
+            {
+                System.out.println("AZERTY");
+                Message message = receiver3.receive();
+                ObjectMessage om = (ObjectMessage) message;
+                Tweet t = (Tweet) om.getObject();
+                /*
+                System.out.println( db.insertUser("maBddTwitter", "maBddTwitter", "maBddTwitter", 
+                        "maBddTwitter", mydate, "maBddTwitter"));
+                */
+                System.out.println("Received:222 " + t.getVilleEmission()+" pppp "+om.getJMSDestination());
+                
+            }
         
             
         } catch (JMSException exception) {
