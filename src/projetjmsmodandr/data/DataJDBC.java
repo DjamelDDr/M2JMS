@@ -605,24 +605,41 @@ public class DataJDBC {
 	public String getHistoriqueSuivi(String logA, String logB)
 	{
 		// TODO Auto-generated method stub
+                String retour=""; 
 		System.out.println("Relation entre l'utilisateur : "+logA+" et l'utilisateur :" +logB);
 		try {
 			requeteGetHistoriqueSuiviSt.setString(1,logA);
                         requeteGetHistoriqueSuiviSt.setString(2, logB);
 			ResultSet rs = requeteGetHistoriqueSuiviSt.executeQuery();
-			if (rs.next()) {
-				String retour = "Utilisateur = "+rs.getString(1) +"\n"+
+                        
+   
+                        
+			while (rs.next()) {
+                            
+                                     retour  += "Utilisateur = "+rs.getString(1) +"\n"+
                                                 "Follower = "+rs.getString(4) +"\n"+
                                                 "Depuis = "+rs.getTimestamp(2) +"\n"+
-                                                "Jusqu'au = "+rs.getTimestamp(3);
-				return retour;
-			} else {
-				return null;
-			}
+                                                "Jusqu'au = "+rs.getTimestamp(3)+"\n"+
+                                                "  ---------- "+"\n";
+				
+                                    //System.out.println(retour);
+                                     //return retour;
+                                    
+			} //else {
+                        if(retour.equals("")){
+                            
+                            return null;
+                           
+                        }else{
+                            return retour;
+                            
+                        }        
+			//}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
+                //return retour;
 	}
         
         /**
