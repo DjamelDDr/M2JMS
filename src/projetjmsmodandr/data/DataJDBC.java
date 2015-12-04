@@ -50,6 +50,11 @@ public class DataJDBC {
     private static final String requeteUpdateUser = "update USER set mdp = ? where login = ?";
     /**
      * Squelette de la requête sql sans les valeurs<p>
+     * mettant à jour la date de dernière connexion d'un user dans la TABLE USER grâce à son login
+     */
+    private static final String requeteUpdateUserConnexion = "update USER set dateDerniereConnexion = ? where login = ?";
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
      * créant un nouvel user avec toutes ses infos dans la TABLE USER
      */
     private static final String requeteInsertUser = "insert into USER values (?, ?, ?, ?, ?, ? )";
@@ -147,6 +152,11 @@ public class DataJDBC {
      * (squelette + valeurs)
      */
     private PreparedStatement requeteUpdateUserSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteUpdateUserConnexionSt = null;
     /**
      * requête préparées qui va contenir toutes les infos<p>
      * (squelette + valeurs)
@@ -294,6 +304,7 @@ public class DataJDBC {
                 requeteGetUserSt = conn.prepareStatement(requeteGetUser);
 	        requeteDeleteUserSt = conn.prepareStatement(requeteDeleteUser);
                 requeteUpdateUserSt = conn.prepareStatement(requeteUpdateUser);
+                requeteUpdateUserConnexionSt = conn.prepareStatement(requeteUpdateUserConnexion);
                 requeteInsertUserSt = conn.prepareStatement(requeteInsertUser);
 
                 requeteSelectTestUserLoginSt = conn.prepareStatement(requeteSelectTestUserLogin);
@@ -534,7 +545,7 @@ public class DataJDBC {
                 obj.delTweet(loTd,num);
             */
                
-            
+            /*
                 //test getMesFollowers()
                 System.out.println("test getMesFollowers()");
                 String lFol;
@@ -544,7 +555,8 @@ public class DataJDBC {
                 
                 System.out.println(obj.getMesFollowers(lFol));
                 System.out.println("");
-                
+            */
+            /*
                 //test getPersIFollow()
                 System.out.println("test getPersIFollow()");
                 String lpFol;
@@ -554,7 +566,22 @@ public class DataJDBC {
                 
                 System.out.println(obj.getPersIFollow(lpFol));
                 System.out.println("");
-                
+            */
+             
+                //test connexion()
+                System.out.println("test connexion()");
+                String logCox, mdpO;
+                System.out.println("login :");
+                logCox = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("mot de passe :");
+                mdpO = sTestBDD.next(); //entree du mdp
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("");
+                System.out.println(obj.connexion(logCox,mdpO));
+                System.out.println("");
+                System.out.println(obj.getUser(logCox));
+           
                 obj.close();
                 
                 
@@ -709,6 +736,52 @@ public class DataJDBC {
 		}
             
         }
+        
+        /**
+        * Retournes les infos d'un user
+        * @param login identifiant de l'utilisateur
+        * @param mdp
+        * @return null ou retour  - ok
+        **/
+	public String connexion(String login, String mdp)
+	{
+		// TODO Auto-generated method stub
+                String retour;
+                Timestamp myDate;
+                System.out.println("Tentative de connexion de l'user : "+login+ " avec mdp : "+mdp);
+                
+                try {
+			requeteSelectTestUserLoginSt.setString(1,login);
+			requeteSelectTestUserLoginSt.setString(2,mdp);
+			
+			ResultSet rs = requeteSelectTestUserLoginSt.executeQuery();
+			
+	        if (! rs.next()) {
+	        	
+	        	retour = "login ou/et mdp n'existe pas : " +login+ " Mdp : "+mdp;
+                        System.out.println(retour);
+	        	return "0";
+	        } else {
+                    
+                java.util.Date today = new java.util.Date();//recuperation de la date du jour
+                myDate = new Timestamp(today.getTime());// recuperation du time actuelle
+                
+                        requeteUpdateUserConnexionSt.setTimestamp(1, myDate);
+                        requeteUpdateUserConnexionSt.setString(2, login);
+                        requeteUpdateUserConnexionSt.executeUpdate();
+                
+                       System.out.println(1); 
+                        retour = "Connexion de  : "+login+ " enregistrée";
+                        
+                        System.out.println(retour);
+	        	return "1";
+	        	
+	        }
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return "-1";
+		}
+	}
         
         /**
          * 
