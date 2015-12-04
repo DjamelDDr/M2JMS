@@ -5,6 +5,9 @@
  */
 package projetjmsmodandr.serveur;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,6 +20,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 import projetjmsmodandr.client.Users;
 import projetjmsmodandr.data.DataJDBC;
@@ -26,7 +30,7 @@ import projetjmsmodandr.messages.Tweet;
  *
  * @author Djamel D
  */
-public class Serveur {
+public class Serveur{
 
     public static void main(String[] args) {
         Context context = null;
@@ -38,9 +42,10 @@ public class Serveur {
         int count = 1;
         Session session = null;
         MessageConsumer receiver3 = null;
-        MessageConsumer receiUser = null;
-
-
+        MessageConsumer listener = null;
+        
+        BufferedReader waiter = null;
+        
         if (args.length < 1 || args.length > 2) {
             System.out.println("usage: Receiver <destination> [count]");
             System.exit(1);
@@ -57,34 +62,26 @@ public class Serveur {
             dest = (Destination) context.lookup(destName);
             connection = factory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            receiver3 = session.createConsumer(dest, "JMSType IN ('msg') ");
-            receiUser = session.createConsumer(dest, "JMSType IN ('user') ");
+     
+            listener = session.createConsumer(dest);
+            //receiver3 = session.createConsumer(dest, "JMSType IN ('msg') ");
+            listener.setMessageListener(new SampleListener());
             connection.start();
             Timestamp mydate;
 
             java.util.Date today = new java.util.Date();//recuperation de la date du jour
             mydate = new Timestamp(today.getTime());// recuperation du time actuelle
 
-            DataJDBC db = new DataJDBC("maBddTwitter");
+            //supprimer fichier H2 ds racine projet
+           // DataJDBC db = new DataJDBC("maBddTwitter");
             
             
-            while (true)  
-            {
-                System.out.println("AZERTY");
-                Message message = receiUser.receive();
-               
-                ObjectMessage om = (ObjectMessage) message;
-                
-                Users t = (Users) om.getObject();
-                /*
-                System.out.println( db.insertUser("maBddTwitter", "maBddTwitter", "maBddTwitter", 
-                        "maBddTwitter", mydate, "maBddTwitter"));
-                */
-                System.out.println("Received:    " + t.getLogin()+" pppp "+om.getJMSDestination());
-                
-            }
-        
+          
+            waiter = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("            "+waiter.readLine());
             
+        }catch (IOException exception) {
+            exception.printStackTrace();
         } catch (JMSException exception) {
             exception.printStackTrace();
         } catch (NamingException exception) {
@@ -108,6 +105,6 @@ public class Serveur {
                 }
             }
         }
-        }
+    }
 
 }

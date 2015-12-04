@@ -104,7 +104,7 @@ public class Client {
                             
                             Users ulog = new Users(login, psw);
                             ObjectMessage objU = session.createObjectMessage(ulog);
-                            objU.setJMSType("user");
+                            //objU.setJMSType("user");
                             sender.send(objU);
                             break;
                     }
