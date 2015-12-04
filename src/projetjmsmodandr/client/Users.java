@@ -5,13 +5,14 @@
  */
 package projetjmsmodandr.client;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Djamel D
  */
-public class Users {
+public class Users implements Serializable{
     private String nom;
     private String prenom;
     private String login;
@@ -30,6 +31,16 @@ public class Users {
         this.derniereConnexion = new Date();
         this.villeReceprion = villeReceprion;
     }
+    
+        public Users(String login,String motDePasse){
+        this.nom= nom;
+        this.prenom=prenom;
+        this.login = login;
+        this.motDePasse = motDePasse;
+        this.derniereConnexion = new Date();
+        this.villeReceprion = villeReceprion;
+    }
+    
     /**
      * @return the nom
      */

@@ -31,9 +31,9 @@
           <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
               <Component id="B_Inscription_Acceuil" max="32767" attributes="0"/>
               <Component id="label1" max="32767" attributes="0"/>
-              <Component id="jTextField1" max="32767" attributes="0"/>
+              <Component id="txt_login" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jTextField2" min="-2" pref="84" max="-2" attributes="0"/>
+                  <Component id="txt_mdp" min="-2" pref="84" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="B_Connexion_Acceuil" pref="177" max="32767" attributes="0"/>
               </Group>
@@ -44,14 +44,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-              <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
+              <Component id="txt_login" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txt_mdp" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="B_Connexion_Acceuil" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-              <Component id="label1" min="-2" max="-2" attributes="0"/>
+              <Component id="label1" min="-2" pref="20" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="B_Inscription_Acceuil" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -62,35 +62,47 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="txt_login">
       <Properties>
         <Property name="text" type="java.lang.String" value="Login"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_loginActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField2">
+    <Component class="javax.swing.JTextField" name="txt_mdp">
       <Properties>
         <Property name="text" type="java.lang.String" value="Mdp"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_mdpActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="B_Connexion_Acceuil">
       <Properties>
         <Property name="text" type="java.lang.String" value="Connexion"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="B_Connexion_AcceuilMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="B_Connexion_AcceuilActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
     <Component class="java.awt.Label" name="label1">
       <Properties>
         <Property name="text" type="java.lang.String" value="                     Nouveau?Cliquez ci-dessous"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="B_Inscription_Acceuil">
       <Properties>
         <Property name="text" type="java.lang.String" value="Inscription"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="B_Inscription_AcceuilMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="B_Inscription_AcceuilActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="B_Quitter">
@@ -98,7 +110,7 @@
         <Property name="text" type="java.lang.String" value="Quitter"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="B_QuitterMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="B_QuitterActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

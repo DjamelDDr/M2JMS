@@ -63,6 +63,11 @@ public class Inscription extends javax.swing.JFrame {
                 B_Inscription_ThisMouseClicked(evt);
             }
         });
+        B_Inscription_This.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_Inscription_ThisActionPerformed(evt);
+            }
+        });
 
         B_Retour_Inscription.setText("Retour");
         B_Retour_Inscription.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -166,6 +171,10 @@ jLabel1.setForeground(Color.yellow);      // TODO add your handling code here:
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void B_Inscription_ThisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Inscription_ThisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_B_Inscription_ThisActionPerformed
 
     /**
      * @param args the command line arguments

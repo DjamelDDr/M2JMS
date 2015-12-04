@@ -5,11 +5,31 @@
  */
 package projetjmsmodandr.client;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Timestamp;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import javax.jms.JMSException;
+import javax.jms.Destination;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import projetjmsmodandr.messages.Tweet;
+import javax.swing.*;
 /**
  *
  * @author kuka
  */
-public class Acceuil extends javax.swing.JFrame {
+public class Acceuil  extends JFrame{
 
     /**
      * Creates new form Acceuil
@@ -27,8 +47,8 @@ public class Acceuil extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txt_login = new javax.swing.JTextField();
+        txt_mdp = new javax.swing.JTextField();
         B_Connexion_Acceuil = new javax.swing.JButton();
         label1 = new java.awt.Label();
         B_Inscription_Acceuil = new javax.swing.JButton();
@@ -36,30 +56,40 @@ public class Acceuil extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("Login");
+        txt_login.setText("Login");
+        txt_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_loginActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setText("Mdp");
+        txt_mdp.setText("Mdp");
+        txt_mdp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_mdpActionPerformed(evt);
+            }
+        });
 
         B_Connexion_Acceuil.setText("Connexion");
-        B_Connexion_Acceuil.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                B_Connexion_AcceuilMouseClicked(evt);
+        B_Connexion_Acceuil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_Connexion_AcceuilActionPerformed(evt);
             }
         });
 
         label1.setText("                     Nouveau?Cliquez ci-dessous");
 
         B_Inscription_Acceuil.setText("Inscription");
-        B_Inscription_Acceuil.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                B_Inscription_AcceuilMouseClicked(evt);
+        B_Inscription_Acceuil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_Inscription_AcceuilActionPerformed(evt);
             }
         });
 
         B_Quitter.setText("Quitter");
-        B_Quitter.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                B_QuitterMouseClicked(evt);
+        B_Quitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_QuitterActionPerformed(evt);
             }
         });
 
@@ -74,9 +104,9 @@ public class Acceuil extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(B_Inscription_Acceuil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1)
+                .addComponent(txt_login)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_mdp, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addComponent(B_Connexion_Acceuil, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)))
         );
@@ -84,13 +114,13 @@ public class Acceuil extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_mdp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(B_Connexion_Acceuil))
                 .addGap(80, 80, 80)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(B_Inscription_Acceuil)
                 .addGap(18, 18, 18)
@@ -101,26 +131,26 @@ public class Acceuil extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void B_QuitterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_QuitterMouseClicked
-System.exit(0);        // TODO add your handling code here:
-    }//GEN-LAST:event_B_QuitterMouseClicked
+    private void txt_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_loginActionPerformed
 
-    private void B_Inscription_AcceuilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Inscription_AcceuilMouseClicked
-final Inscription frame = new Inscription();
-frame.setDefaultCloseOperation(Inscription.EXIT_ON_CLOSE);
-frame.setSize(400, 400);
-frame.setVisible(true);
-this.dispose();
-// TODO add your handling code here:
-    }//GEN-LAST:event_B_Inscription_AcceuilMouseClicked
+    }//GEN-LAST:event_txt_loginActionPerformed
 
-    private void B_Connexion_AcceuilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_B_Connexion_AcceuilMouseClicked
-final Connexion frame = new Connexion();
-frame.setDefaultCloseOperation(Connexion.EXIT_ON_CLOSE);
-frame.setSize(400, 400);
-frame.setVisible(true);
-this.dispose();         // TODO add your handling code here:
-    }//GEN-LAST:event_B_Connexion_AcceuilMouseClicked
+    private void B_Connexion_AcceuilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Connexion_AcceuilActionPerformed
+      
+               
+    }//GEN-LAST:event_B_Connexion_AcceuilActionPerformed
+
+    private void B_Inscription_AcceuilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_Inscription_AcceuilActionPerformed
+        // TODO add your, handling code here:
+    }//GEN-LAST:event_B_Inscription_AcceuilActionPerformed
+
+    private void B_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_QuitterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_B_QuitterActionPerformed
+
+    private void txt_mdpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_mdpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_mdpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,7 +178,124 @@ this.dispose();         // TODO add your handling code here:
             java.util.logging.Logger.getLogger(Acceuil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        JButton B_Connexion_Acceuil = null;
+        JButton B_Inscription_Acceuil;
+        JButton B_Quitter;
+        final JLabel label1 = null;
+        JTextField txt_login;
+        JTextField txt_mdp;
 
+                   
+        
+        Context context = null;
+        ConnectionFactory factory = null;
+        Connection connection = null;
+        
+        String factoryName = "ConnectionFactory";
+        String destName = null;        
+        String destNameFile = null;
+
+        
+        Destination dest = null;
+      
+        int count = 1;
+        Session session = null;
+        MessageProducer sender = null;
+        
+        MessageConsumer receveurMsg = null;
+       // String text = "Message ";
+      
+        if (args.length < 1 || args.length > 2) {
+            System.out.println("usage: Sender <destination> [count]");
+            System.exit(1);
+        }
+        
+        //   System.out.println("args[0]"+args[0]+"args[1]"+args[1] );
+        destName = args[0];
+        if (args.length == 2) {
+            count = Integer.parseInt(args[1]);
+        }
+
+
+        try {
+          
+            // create the JNDI initial context.
+            context = new InitialContext();
+
+            // look up the ConnectionFactory
+            factory = (ConnectionFactory) context.lookup(factoryName);
+        // look up the Destination
+            dest = (Destination) context.lookup(destName);          
+            
+            Destination destFileTmp =(Destination) context.lookup(destName);          
+            // create the connection
+            connection = factory.createConnection();
+            //création de la connection pour la file temporaire
+            
+            // create the session
+            session = connection.createSession(
+                false, Session.AUTO_ACKNOWLEDGE);
+
+            // create the sender
+            sender = session.createProducer(dest);
+            //l'envoi de message dans la file d'attente temporaire
+            receveurMsg = session.createConsumer(destFileTmp, "JMSType IN ('T1','T2') ");
+            
+            
+/*ARRIVE ICI**/
+            //QueueBrowser browser = session.createBrowser(queue);
+            // start the connection, to enable message sends
+            connection.start();
+
+            java.util.Date today = new java.util.Date();//recuperation de la date du jour
+            Timestamp mydate = new Timestamp(today.getTime()); // recuperation du time actuelle
+            
+            
+            B_Connexion_Acceuil.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    label1.setText("AAA");
+                }
+            });
+            
+            
+           // private final JButton bouton = new JButton("Mon bouton");
+            int nb = (int) (Math.random() * 6 );
+
+            for (int i = 0; i < 6; ++i) {
+            
+                Tweet msg = new Tweet("contenuuuu","Toulouse",false);
+                ObjectMessage objtweet = session.createObjectMessage(msg);
+                //le type ici c'est son reseau
+                objtweet.setJMSType("T1");
+                sender.send(objtweet);
+                System.out.println("Sent: " +  msg.getContenu());
+                
+            }
+        } catch (JMSException exception) {
+            exception.printStackTrace();
+        } catch (NamingException exception) {
+            exception.printStackTrace();
+        } finally {
+            // close the context
+            if (context != null) {
+                try {
+                    context.close();
+                } catch (NamingException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            // close the connection
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        } 
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -158,11 +305,12 @@ this.dispose();         // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton B_Connexion_Acceuil;
+    public static javax.swing.JButton B_Connexion_Acceuil;
     private javax.swing.JButton B_Inscription_Acceuil;
     private javax.swing.JButton B_Quitter;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private java.awt.Label label1;
+    public static java.awt.Label label1;
+    private javax.swing.JTextField txt_login;
+    private javax.swing.JTextField txt_mdp;
     // End of variables declaration//GEN-END:variables
+
 }

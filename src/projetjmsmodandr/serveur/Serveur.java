@@ -17,6 +17,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
+import projetjmsmodandr.client.Users;
 import projetjmsmodandr.data.DataJDBC;
 import projetjmsmodandr.messages.Tweet;
 /**
@@ -34,7 +35,7 @@ public class Serveur {
         int count = 1;
         Session session = null;
         MessageConsumer receiver3 = null;
-
+        MessageConsumer receiUser = null;
 
 
         if (args.length < 1 || args.length > 2) {
@@ -53,7 +54,8 @@ public class Serveur {
             dest = (Destination) context.lookup(destName);
             connection = factory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            receiver3 = session.createConsumer(dest, "JMSType IN ('T1','T2') ");
+            receiver3 = session.createConsumer(dest, "JMSType IN ('msg') ");
+            receiUser = session.createConsumer(dest, "JMSType IN ('user') ");
             connection.start();
             Timestamp mydate;
 
@@ -66,14 +68,16 @@ public class Serveur {
             while (true)  
             {
                 System.out.println("AZERTY");
-                Message message = receiver3.receive();
+                Message message = receiUser.receive();
+               
                 ObjectMessage om = (ObjectMessage) message;
-                Tweet t = (Tweet) om.getObject();
+                
+                Users t = (Users) om.getObject();
                 /*
                 System.out.println( db.insertUser("maBddTwitter", "maBddTwitter", "maBddTwitter", 
                         "maBddTwitter", mydate, "maBddTwitter"));
                 */
-                System.out.println("Received:222 " + t.getVilleEmission()+" pppp "+om.getJMSDestination());
+                System.out.println("Received:    " + t.getLogin()+" pppp "+om.getJMSDestination());
                 
             }
         
