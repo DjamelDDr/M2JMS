@@ -100,11 +100,16 @@ public class DataJDBC {
      * récupérant toutes les infos d'un message dans la TABLE TWEETBD grâce à son login
      */
     private static final String requeteGetTweetBD = "select idTweet, login, contenu, villeEmission, geoActivee, dateEmission from TWEETBD where login = ?";
-        /**
+    /**
      * Squelette de la requête sql sans les valeurs<p>
      * récupérant toutes les infos d'un message dans la TABLE TWEETBD grâce à son login
      */
     private static final String requeteDelTweetBD = "delete from TWEETBD where login = ? and idTweet = ?";
+    /**
+     * Squelette de la requête sql dans les valeurs<p>
+     * testant la présence du login la TABLE TWEETBD
+     */
+    private static final String requeteSelectTestTweetLogin = "select * from TWEETBD where login = ?";
     
     
     private static final String requeteInsertEmprunter = "insert into EMPRUNTER values (?, ?, ? )";
@@ -183,6 +188,11 @@ public class DataJDBC {
      * (squelette + valeurs)
      */
     private PreparedStatement requeteDelTweetBDSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteSelectTestTweetLoginSt = null;
     
     private PreparedStatement requeteUpdateRetraitSt = null;
 
@@ -253,48 +263,6 @@ public class DataJDBC {
 	        			);
 	                        
                         
-	    /*    	s.execute("create table VELO  ( " +
-	        			"num_velo int ," +
-	        			"CONSTRAINT pk_velo PRIMARY KEY(num_velo ), " +
-	        			"CONSTRAINT nn_type_num_velo CHECK(num_velo  IS NOT NULL) )"
-	        			);
-	        	
-
-	        	 //on ajoute des entrees des velos
-	        	s.executeUpdate("insert into VELO values (1)");
-	        	s.executeUpdate("insert into VELO values (2)");
-	        	s.executeUpdate("insert into VELO values (3)");
-	        	s.executeUpdate("insert into VELO values (4)");
-	        	s.executeUpdate("insert into VELO values (5)");
-	        	
-	        	
-   	
-	        	s.execute("create table STATION  ( " +
-	        			"num_station int ," +
-	        			"isAtelier boolean, " +
-	        			"capacite int," + 
-	        			" CONSTRAINT pk_station PRIMARY KEY(num_station )," +
-	        			" CONSTRAINT nn_type_num_station CHECK(num_station IS NOT NULL) )"
-	        			);
-	        	
-	        	 //on ajoute des entrees des stations
-	        	s.executeUpdate("insert into STATION values (1,0,5)");
-	        	s.executeUpdate("insert into STATION values (2,0,5)");
-	        	s.executeUpdate("insert into STATION values (3,0,5)");
-	        	s.executeUpdate("insert into STATION values (4,1,5)");
-	        	
-	        	
-	        	
-	        */
-	          /*   s.execute("create table EMPRUNTER  ( " +
-	            		"login VARCHAR( 256 ) , " +
-	            		// "num_velo int ," +
-	        			"CONSTRAINT pk_station PRIMARY KEY(login, num_velo)," +
-	        			"CONSTRAINT fk_emprunter_client FOREIGN KEY(login ) REFERENCES CLIENT(login ) ," +
-	        			"CONSTRAINT fk_emprunter_velo FOREIGN KEY(num_velo ) REFERENCES VELO(num_velo ) ," +
-	        			"CONSTRAINT nn_type_log_emprunte CHECK(login IS NOT NULL) ,"  +
-						"CONSTRAINT nn_type_num_velo_emp CHECK(num_velo IS NOT NULL) )"
-	        			); */
 
 	        	
 	        	// on retente la construction qui devrait desormais marcher
@@ -322,6 +290,10 @@ public class DataJDBC {
                 requeteInsertTweetBDSt = conn.prepareStatement(requeteInsertTweetBD);
                 
                 requeteGetTweetBDSt = conn.prepareStatement(requeteGetTweetBD);
+                
+                requeteDelTweetBDSt = conn.prepareStatement(requeteDelTweetBD);
+                
+                requeteSelectTestTweetLoginSt = conn.prepareStatement(requeteSelectTestTweetLogin);
 		    
 		  //  requeteInsertEmprunterSt = conn.prepareStatement(requeteInsertEmprunter);
 		  //  requeteSelectTestEmprunterSt = conn.prepareStatement(requeteSelectTestEmprunter);
@@ -526,6 +498,20 @@ public class DataJDBC {
                 System.out.println(obj.getTweetBD(loT));
                 System.out.println("");
             
+            
+              //test delTweetBD()
+                System.out.println("test delTweetBD()");
+                String loTd;int num;
+                System.out.println("login :");
+                loTd = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                System.out.println("numero du message à supprimer :");
+                num = sTestBDD.nextInt(); //entree du num
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                
+                obj.delTweet(loTd,num);
+            
+                
                 obj.close();
                 
                 
@@ -927,31 +913,30 @@ public class DataJDBC {
 	}
         
         /**
-        * Supprimes un user
+        * Supprimes un tweet
         * @param login identifiant d'un user
-        * @param mdp mot de passe d'un user
+        * @param nbMess numéro du message
         * @return false - login et/ou mdp n'existe pas ou true
         **/
-        public boolean delTweet(String login,String mdp)
+        public boolean delTweet(String login,int nbMess)
 	{
 
-		System.out.println("Tentative de suppression de l'user : "+login+ " Mdp :"+mdp);
+		System.out.println("Tentative de suppression du tweet : "+nbMess+ " de l'user :"+login);
 		
 		try {
-			requeteSelectTestUserLoginSt.setString(1,login);
-			requeteSelectTestUserLoginSt.setString(2,mdp);
+			requeteSelectTestTweetLoginSt.setString(1,login);
 			
-			ResultSet rs = requeteSelectTestUserLoginSt.executeQuery();
+			ResultSet rs = requeteSelectTestTweetLoginSt.executeQuery();
 			
 	        if (! rs.next()) {
 	        	
-	        	System.out.println("login ou/et mdp n'existe pas : " +login+ " Mdp :"+mdp);
+	        	System.out.println("L'utilisateur : " +login+ " n'as pas encore envoyer de message :");
 	        	return false;
 	        } else {
-	        	requeteDeleteUserSt.setString(1, login);
-	        	requeteDeleteUserSt.setString(2, mdp);
-	        	requeteDeleteUserSt.executeUpdate();
-	        	System.out.println(" Suppression de l'user : "+login+ " effectuée" );
+	        	requeteDelTweetBDSt.setString(1, login);
+	        	requeteDelTweetBDSt.setInt(2, nbMess);
+	        	requeteDelTweetBDSt.executeUpdate();
+	        	System.out.println("Suppression du message effectuée" );
 	        	return true;
 	        	
 	        }
