@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package projetjmsmodandr.serveur;
+
 import java.sql.Timestamp;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,12 +20,14 @@ import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
 import projetjmsmodandr.client.Users;
 import projetjmsmodandr.data.DataJDBC;
+
 import projetjmsmodandr.messages.Tweet;
 /**
  *
  * @author Djamel D
  */
 public class Serveur {
+
     public static void main(String[] args) {
         Context context = null;
         ConnectionFactory factory = null;
@@ -106,4 +109,5 @@ public class Serveur {
             }
         }
         }
+
 }
