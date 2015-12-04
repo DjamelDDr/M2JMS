@@ -88,6 +88,18 @@ public class DataJDBC {
      * dans la TABLE HISTORIQUESUIVI grâce aux 2 logins
      */
     private static final String requeteDelHistoriqueSuivi = "update HISTORIQUESUIVI set dateFin = ? where loginA = ? and loginB = ?";
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * récupérant les logins des users qui me suivent<p>
+     * dans la TABLE HISTORIQUESUIVI grâce au login de l'user
+     */
+    private static final String requeteGetMesFollowers = "select loginB from HISTORIQUESUIVI where loginA = ?";
+    /**
+     * Squelette de la requête sql sans les valeurs<p>
+     * récupérant les logins des users qui me suivent<p>
+     * dans la TABLE HISTORIQUESUIVI grâce au login de l'user
+     */
+    private static final String requeteGetPersIFollow = "select loginA from HISTORIQUESUIVI where loginB = ?";
     
     
     /**
@@ -172,6 +184,16 @@ public class DataJDBC {
      * (squelette + valeurs)
      */ 
     private PreparedStatement requeteDelHistoriqueSuiviSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteGetMesFollowersSt = null;
+    /**
+     * requête préparées qui va contenir toutes les infos<p>
+     * (squelette + valeurs)
+     */ 
+    private PreparedStatement requeteGetPersIFollowSt = null;
  
     /**
      * requête préparées qui va contenir toutes les infos<p>
@@ -285,7 +307,10 @@ public class DataJDBC {
                 requeteSelectHistoriqueSuiviLoginsSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLogins);
                 
                 requeteSelectHistoriqueSuiviLoginsDesSt = conn.prepareStatement(requeteSelectHistoriqueSuiviLoginsDes);
-                                
+                 
+                requeteGetMesFollowersSt = conn.prepareStatement(requeteGetMesFollowers);
+                
+                requeteGetPersIFollowSt = conn.prepareStatement(requeteGetPersIFollow);
                 
                 requeteInsertTweetBDSt = conn.prepareStatement(requeteInsertTweetBD);
                 
@@ -295,9 +320,6 @@ public class DataJDBC {
                 
                 requeteSelectTestTweetLoginSt = conn.prepareStatement(requeteSelectTestTweetLogin);
 		    
-		  //  requeteInsertEmprunterSt = conn.prepareStatement(requeteInsertEmprunter);
-		  //  requeteSelectTestEmprunterSt = conn.prepareStatement(requeteSelectTestEmprunter);
-		   // requeteUpdateRetraitSt = conn.prepareStatement(requeteUpdateRetrait);
 		    
 		    
 		} catch(Exception e) {
@@ -487,7 +509,7 @@ public class DataJDBC {
                 System.out.println(obj.insertTweetBD(lo1, cntnu, vEmiss, geo, mydate));
                 System.out.println("");
             */
-            
+            /*
                 //test getTweetBD()
                 System.out.println("test getTweetBD()");
                 String loT;
@@ -497,8 +519,8 @@ public class DataJDBC {
                 
                 System.out.println(obj.getTweetBD(loT));
                 System.out.println("");
-            
-            
+            */
+            /*
               //test delTweetBD()
                 System.out.println("test delTweetBD()");
                 String loTd;int num;
@@ -510,7 +532,28 @@ public class DataJDBC {
                 sTestBDD.nextLine(); //saute le retour a la ligne
                 
                 obj.delTweet(loTd,num);
+            */
+               
             
+                //test getMesFollowers()
+                System.out.println("test getMesFollowers()");
+                String lFol;
+                System.out.println("Votre login :");
+                lFol = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                
+                System.out.println(obj.getMesFollowers(lFol));
+                System.out.println("");
+                
+                //test getPersIFollow()
+                System.out.println("test getPersIFollow()");
+                String lpFol;
+                System.out.println("Votre login :");
+                lpFol = sTestBDD.next(); //entree du login
+                sTestBDD.nextLine(); //saute le retour a la ligne
+                
+                System.out.println(obj.getPersIFollow(lpFol));
+                System.out.println("");
                 
                 obj.close();
                 
@@ -535,11 +578,12 @@ public class DataJDBC {
                                                 "date de derniere connexion = "+rs.getTimestamp(5)+"    "+"ville de reception = "+rs.getString(6);
 				return retour;
 			} else {
-				return null;
+                                System.out.println("L'utilisateur est inconnu !!!");
+				return "0";
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-			return null;
+			return "-1";
 		}
 	}
         
@@ -692,10 +736,8 @@ public class DataJDBC {
                                                 "Jusqu'au = "+rs.getTimestamp(3)+"\n"+
                                                 "  ---------- "+"\n";
 				
-                                    //System.out.println(retour);
-                                     //return retour;
                                     
-			} //else {
+			}
                         if(retour.equals("")){
                             
                             return null;
@@ -704,12 +746,88 @@ public class DataJDBC {
                             return retour;
                             
                         }        
-			//}
+			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
-                //return retour;
+                
+	}
+        
+        /**
+         * 
+         * @param logA identifiant d'un user
+         * @return 
+         */
+	public String getMesFollowers(String logA)
+	{
+		// TODO Auto-generated method stub
+                String users=","; 
+		System.out.println("Followers de l'utilisateur : "+logA);
+		try {
+			requeteGetMesFollowersSt.setString(1,logA);
+                        ResultSet rs = requeteGetMesFollowersSt.executeQuery();
+                        
+   
+                        
+			while (rs.next()) {
+                            
+                                     users  += rs.getString(1) +",";
+				
+                                    
+			}
+                        if(users.equals("")){
+                            System.out.println("Vous N'avez Aucun Followers");
+                            return "0";
+                           
+                        }else{
+                            return users;
+                            
+                        }        
+			//}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return "-1";
+		}
+                
+	}
+        
+        /**
+         * 
+         * @param logB identifiant d'un user
+         * @return 
+         */
+	public String getPersIFollow(String logB)
+	{
+		// TODO Auto-generated method stub
+                String users=","; 
+		System.out.println("Personnes que: "+logB+ " follow");
+		try {
+			requeteGetPersIFollowSt.setString(1,logB);
+                        ResultSet rs = requeteGetPersIFollowSt.executeQuery();
+                        
+   
+                        
+			while (rs.next()) {
+                            
+                                     users  += rs.getString(1) +",";
+				
+                                    
+			}
+                        if(users.equals("")){
+                            System.out.println("Vous Ne Suivez Personne pour l'instant");
+                            return "0";
+                           
+                        }else{
+                            return users;
+                            
+                        }        
+			//}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return "-1";
+		}
+                
 	}
         
         /**
@@ -742,13 +860,15 @@ public class DataJDBC {
                         requeteInsertHistoriqueSuiviSt.setNull(3, 93);
                         requeteInsertHistoriqueSuiviSt.setString(4, logB);                        
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
-                        System.out.println(1); 
+                        
                         retour = "(Réabonnement)Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
-                        return retour; 
+                        System.out.println(retour); 
+                        return "2"; 
                     }
                     
                         retour = "login : " +logB+ " suit déjà login : "+logA+" depuis le : "+ rs.getTimestamp(1);
-	        	return retour;
+	        	System.out.println(retour); 
+                        return "0";
                 } else {
                     
                         requeteInsertHistoriqueSuiviSt.setString(1,logA);
@@ -756,9 +876,10 @@ public class DataJDBC {
                         requeteInsertHistoriqueSuiviSt.setNull(3, 93);
                         requeteInsertHistoriqueSuiviSt.setString(4, logB);
                         requeteInsertHistoriqueSuiviSt.executeUpdate();
-                        System.out.println(1); 
+                         
                         retour = "Creation du suivi de l'user : "+logA+ " par l'user : "+logB+" effectué";
-                        return retour; 
+                        System.out.println(retour); 
+                        return "1"; 
                         
                         
                         
@@ -798,7 +919,8 @@ public class DataJDBC {
                     if (rs1.getTimestamp(1) != null)
                     {
                         retour = "login : " +logB+ " est déjà désabonné au login : "+logA;
-	        	return retour;
+                        System.out.println(retour);
+	        	return "0";
                     }
                     
                         requeteDelHistoriqueSuiviSt.setTimestamp(1, fin);
@@ -806,16 +928,17 @@ public class DataJDBC {
                         requeteDelHistoriqueSuiviSt.setString(3, logB);
                         requeteDelHistoriqueSuiviSt.executeUpdate();
                         
-                        System.out.println(1); 
+                         
                         retour = "Desabonnement à l'user : "+logA+ " par l'user : "+logB+" effectué";
-                        
-                        return retour; 
+                        System.out.println(retour);
+                        return "1"; 
                     
                         
                 } else {
                         
                         retour = "login : " +logB+ " ne suit pas encore login : "+logA;
-	        	return retour;
+                        System.out.println(retour);
+	        	return "0";
                 }
                 } catch (SQLException e) {
 			e.printStackTrace();
@@ -849,7 +972,7 @@ public class DataJDBC {
                         requeteInsertTweetBDSt.executeUpdate();
  
     
-                       System.out.println(1); 
+                       System.out.println("Tweet Enregistré"); 
                         retour = "1";
                         
                         
