@@ -4,107 +4,117 @@
  * and open the template in the editor.
  */
 package projetjmsmodandr.serveur;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Timestamp;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Destination;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.ObjectMessage;
-import javax.jms.Session;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-import projetjmsmodandr.client.Users;
-import projetjmsmodandr.data.DataJDBC;
-
+	import javax.naming.Context;
+	import javax.naming.InitialContext;
+	import javax.naming.NamingException;
+	import javax.jms.JMSException;
+	import javax.jms.Message;
+	import javax.jms.Destination;
+	import javax.jms.Connection;
+	import javax.jms.ConnectionFactory;
+	import javax.jms.ObjectMessage;
+	import javax.jms.Session;
+	import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+	
 import projetjmsmodandr.messages.Tweet;
 /**
  *
  * @author Djamel D
  */
-public class Serveur{
+public class Serveur {
+    
+     static String destName = "queue1";
+    public static void main(String[] args) {       
+	        Context context = null;
+	        ConnectionFactory factory = null;
+	        Connection connection = null;
+	        String factoryName = "ConnectionFactory";
+	       
+	        Destination dest = null;
+	        int count = 1;
+	        Session session = null;
+	        MessageConsumer receiver3 = null;
+                MessageProducer sender = null;   
+	        /*if (args.length < 1 || args.length > 2) {
+	            System.out.println("usage: Receiver <destination> [count]");
+	            System.exit(1);
+	        }
 
-    public static void main(String[] args) {
-        Context context = null;
-        ConnectionFactory factory = null;
-        Connection connection = null;
-        String factoryName = "ConnectionFactory";
-        String destName = null;
-        Destination dest = null;
-        int count = 1;
-        Session session = null;
-        MessageConsumer receiver3 = null;
-        MessageConsumer listener = null;
-        
-        BufferedReader waiter = null;
-        
-        if (args.length < 1 || args.length > 2) {
-            System.out.println("usage: Receiver <destination> [count]");
-            System.exit(1);
-        }
+	        destName = args[0];
+	        if (args.length == 2) {
+	            count = Integer.parseInt(args[1]);
+	        }
+                */
+	        try {
+	            // create the JNDI initial context
+	            context = new InitialContext();
 
-        destName = args[0];
-        if (args.length == 2) {
-            count = Integer.parseInt(args[1]);
-        }
+	            // look up the ConnectionFactory
+	            factory = (ConnectionFactory) context.lookup(factoryName);
 
-        try {
-            context = new InitialContext();
-            factory = (ConnectionFactory) context.lookup(factoryName);
-            dest = (Destination) context.lookup(destName);
-            connection = factory.createConnection();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-     
-            listener = session.createConsumer(dest);
-            //receiver3 = session.createConsumer(dest, "JMSType IN ('msg') ");
-            listener.setMessageListener(new SampleListener());
-            connection.start();
-            Timestamp mydate;
+	            // look up the Destination
+	            dest = (Destination) context.lookup(destName);
 
-            java.util.Date today = new java.util.Date();//recuperation de la date du jour
-            mydate = new Timestamp(today.getTime());// recuperation du time actuelle
+	            // create the connection
+	            connection = factory.createConnection();
 
-            //supprimer fichier H2 ds racine projet
-           // DataJDBC db = new DataJDBC("maBddTwitter");
-            
-            
-          
-            waiter = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("            "+waiter.readLine());
-            
-        }catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (JMSException exception) {
-            exception.printStackTrace();
-        } catch (NamingException exception) {
-            exception.printStackTrace();
-        } finally {
-            // close the context
-            if (context != null) {
-                try {
-                    context.close();
-                } catch (NamingException exception) {
-                    exception.printStackTrace();
-                }
-            }
+	            // create the session
+	            session = connection.createSession(
+	                false, Session.AUTO_ACKNOWLEDGE);
 
-            // close the connection
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (JMSException exception) {
-                    exception.printStackTrace();
-                }
-            }
-        }
+	            // create the receiver
+	            //receiver = session.createConsumer(dest);
+	            
+	            // create the receiver avec le type
+	            receiver3 = session.createConsumer(dest);
+
+	            // start the connection, to enable message receipt
+	            connection.start();
+                    
+	            while (true)  
+	            {       
+                        
+		            Message message = receiver3.receive();
+                            
+		            ObjectMessage om = (ObjectMessage) message;
+                            
+		            Tweet t = (Tweet) om.getObject();
+		            
+		            System.out.println("Received: " + t.getContenu());
+                            
+                            
+                            //Message response = session.createMessage();
+                            //response.setJMSCorrelationID(om.getJMSCorrelationID());
+                            
+                            //sender.send(om.getJMSReplyTo(), response);
+
+                            //sender = session.createProducer(dest);
+	            }
+	            
+	        } catch (JMSException exception) {
+	            exception.printStackTrace();
+	        } catch (NamingException exception) {
+	            exception.printStackTrace();
+	        } finally {
+	            // close the context
+	            if (context != null) {
+	                try {
+	                    context.close();
+	                } catch (NamingException exception) {
+	                    exception.printStackTrace();
+	                }
+	            }
+
+	            // close the connection
+	            if (connection != null) {
+	                try {
+	                    connection.close();
+	                } catch (JMSException exception) {
+	                    exception.printStackTrace();
+	                }
+	            }
+	        }
     }
-
+    
 }

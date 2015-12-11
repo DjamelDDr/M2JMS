@@ -28,12 +28,14 @@ import projetjmsmodandr.messages.Tweet;
 
 
 public class Client {
+    
        public static void main(String[] args) {
            
         Context context = null;
         ConnectionFactory factory = null;
         Connection connection = null;
         String factoryName = "ConnectionFactory";
+        
         String destName = null;                
         Destination dest = null;
         int count = 1;
@@ -85,6 +87,7 @@ public class Client {
                     System.out.println("+---------------------------+");
                     System.out.println("| 1 - CONNECTION            |");
                     System.out.println("| 2 - INSCRIPTION           |");
+                    System.out.println("| 3 - ENVOYER MSG           |");
                     System.out.println("| 0 - Terminer              |");
                     System.out.println("+---------------------------+");
 
@@ -94,6 +97,7 @@ public class Client {
 			case 0://fin
                             sc.close();
                             fin = true;
+                            
                             break;
                         case 1:
                             String login = null, psw = null;
@@ -105,23 +109,42 @@ public class Client {
                             Users ulog = new Users(login, psw);
                             ObjectMessage objU = session.createObjectMessage(ulog);
                             //objU.setJMSType("user");
+                            sender.send(objU);                     
+                            
+                            break;
+                        case 2:
+                            System.out.println("Login");
+                            login = sc.nextLine();
+                            System.out.println("Mot de passe");
+                            psw = sc.nextLine();
+                            System.out.println("NOM");
+                            String nom = sc.nextLine();
+                            
+                            System.out.println("PRENOM");
+                            String prenom = sc.nextLine();
+                            
+                            System.out.println("VILLE");
+                            String villeReceprion = sc.nextLine();
+                            
+                            Users ulg = new Users( nom, prenom,login,psw,villeReceprion);
+                            objU = session.createObjectMessage(ulg);
+                            
+                            sender.send(objU);  
+                            
+                            break;
+                        case 3 : 
+                            //String login = null, psw = null;
+                            System.out.println("CONTENU");
+                            login = sc.nextLine();
+                            System.out.println("Ville");
+                            psw = sc.nextLine();                            
+                            Tweet msg = new Tweet(login, psw, true);
+                            objU = session.createObjectMessage(msg);
                             sender.send(objU);
                             break;
                     }
                 }
-            
-            
-            
-            for (int i = 0; i < 6; ++i) {
-            
-                Tweet msg = new Tweet("contenuuuu","Toulouse",false);
-                ObjectMessage objtweet = session.createObjectMessage(msg);
-                //le type ici c'est son reseau
-                objtweet.setJMSType("T1");
-                sender.send(objtweet);
-                System.out.println("Sent: " +  msg.getContenu());
-                
-            }
+
         } catch (JMSException exception) {
             exception.printStackTrace();
         } catch (NamingException exception) {
