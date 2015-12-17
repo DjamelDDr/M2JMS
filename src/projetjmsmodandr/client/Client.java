@@ -88,6 +88,7 @@ public class Client {
                     System.out.println("| 1 - CONNECTION            |");
                     System.out.println("| 2 - INSCRIPTION           |");
                     System.out.println("| 3 - ENVOYER MSG           |");
+                    System.out.println("| 4 - RECHERCHE             |");
                     System.out.println("| 0 - Terminer              |");
                     System.out.println("+---------------------------+");
 
@@ -140,6 +141,16 @@ public class Client {
                             psw = sc.nextLine();                            
                             Tweet msg = new Tweet(login, psw, true);
                             objU = session.createObjectMessage(msg);
+                            sender.send(objU);
+                            break;
+                        case 4 : 
+                            //String login = null, psw = null;
+                            System.out.println("LOGIN");
+                            login = sc.nextLine();
+                            System.out.println("Ville");
+                            psw = sc.nextLine();                            
+                            //Tweet msg = new Tweet(login, psw, true);
+//                            objU = session.createObjectMessage(msg);
                             sender.send(objU);
                             break;
                     }
